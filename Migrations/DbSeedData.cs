@@ -164,6 +164,45 @@ namespace ticketsystem_backend.Migrations
                     Module = _context.Modules.First(m => m.Name == "Ernährungswissenschaften"),
                     DocumentType = _context.DocumentTypes.First(d => d.Name == "Video")
                 });
+                _context.SaveChanges();
+
+            }
+
+            if (!_context.Tickets.Any())
+            {
+                _context.Tickets.Add(new Ticket()
+                {
+                    CreatedBy = _context.Users.First(u => u.FirstName == "Mirja"),
+                    CreatedDate = DateTime.Now,
+                    TicketState = _context.TicketStates.First(ts => ts.Name == "offen"),
+                    Document = _context.Documents.First(d => d.Name == "Mahlen nach Zahlen 4")
+                });
+
+                _context.Tickets.Add(new Ticket()
+                {
+                    CreatedBy = _context.Users.First(u => u.FirstName == "Alexander"),
+                    CreatedDate = DateTime.Now,
+                    TicketState = _context.TicketStates.First(ts => ts.Name == "offen"),
+                    Document = _context.Documents.First(d => d.Name == "Mahlen nach Zahlen 3")
+                });
+
+                _context.Tickets.Add(new Ticket()
+                {
+                    CreatedBy = _context.Users.First(u => u.FirstName == "Janina"),
+                    CreatedDate = DateTime.Now,
+                    TicketState = _context.TicketStates.First(ts => ts.Name == "geschlossen"),
+                    Document = _context.Documents.First(d => d.Name == "Mahlen nach Zahlen 2")
+                });
+
+                _context.Tickets.Add(new Ticket()
+                {
+                    CreatedBy = _context.Users.First(u => u.FirstName == "Michael"),
+                    CreatedDate = DateTime.Now,
+                    TicketState = _context.TicketStates.First(ts => ts.Name == "offen"),
+                    Document = _context.Documents.First(d => d.Name == "Mahlen nach Zahlen 1")
+                });
+
+                _context.SaveChanges();
             }
         }
     }
