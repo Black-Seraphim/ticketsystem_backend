@@ -14,6 +14,5 @@ namespace ticketsystem_backend.Models
         public DateTime CreatedDate { get; set; }
         public User LastChangedBy { get; set; }
         public DateTime LastChangedDate { get; set; }
-
     }
 }

@@ -11,6 +11,7 @@ namespace ticketsystem_backend.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PasswordHash { get; set; }
+        public Role Role { get; set; }
 
     }
 }

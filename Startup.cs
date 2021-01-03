@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using ticketsystem_backend.Data;
+using ticketsystem_backend.Migrations;
 
 namespace ticketsystem_backend
 {
@@ -32,10 +35,14 @@ namespace ticketsystem_backend
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ticketsystem_backend", Version = "v1" });
             });
+
+            services.AddDbContext<TicketSystemDbContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("TicketContext")));
+            services.AddTransient<DbSeedData>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbSeedData seeder)
         {
             if (env.IsDevelopment())
             {
@@ -54,6 +61,7 @@ namespace ticketsystem_backend
             {
                 endpoints.MapControllers();
             });
+            seeder.EnsureSeedData();
         }
     }
 }

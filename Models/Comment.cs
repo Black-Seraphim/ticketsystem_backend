@@ -11,6 +11,6 @@ namespace ticketsystem_backend.Models
         public string Text { get; set; }
         public User CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
-
+        public Ticket Ticket { get; set; }
     }
 }
