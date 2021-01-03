@@ -18,6 +18,8 @@ namespace ticketsystem_backend.Migrations
 
         public void EnsureSeedData()
         {
+            _context.Database.EnsureCreated();
+
             if (!_context.Roles.Any())
             {
                 _context.Roles.Add(new Role() { Name = "Student" });
