@@ -107,62 +107,41 @@ namespace ticketsystem_backend.Migrations
                 _context.SaveChanges();
             }
 
-            if (!_context.TicketStates.Any())
-            {
-                _context.TicketStates.Add(new TicketState() { Name = "offen" });
-                _context.TicketStates.Add(new TicketState() { Name = "geschlossen" });
-                _context.SaveChanges();
-            }
-
-            if (!_context.DocumentTypes.Any())
-            {
-                _context.DocumentTypes.Add(new DocumentType() { Name = "PDF" });
-                _context.DocumentTypes.Add(new DocumentType() { Name = "Video" });
-                _context.DocumentTypes.Add(new DocumentType() { Name = "PowerPoint" });
-                _context.DocumentTypes.Add(new DocumentType() { Name = "WebLink" });
-                _context.SaveChanges();
-            }
-
             if (!_context.Documents.Any())
             {
                 _context.Documents.Add(new Document()
                 {
                     Name = "Mahlen nach Zahlen 1",
                     Link = "http://www.mahlennachzahlen.de",
-                    Module = _context.Modules.First(m => m.Name == "Jodeln für Anfänger"),
-                    DocumentType = _context.DocumentTypes.First(d => d.Name == "WebLink")
+                    Module = _context.Modules.First(m => m.Name == "Jodeln für Anfänger")
                 });
 
                 _context.Documents.Add(new Document()
                 {
                     Name = "Mahlen nach Zahlen 2",
                     Link = "http://www.mahlennachzahlen.de",
-                    Module = _context.Modules.First(m => m.Name == "Diskuswerfen"),
-                    DocumentType = _context.DocumentTypes.First(d => d.Name == "PDF")
+                    Module = _context.Modules.First(m => m.Name == "Diskuswerfen")
                 });
 
                 _context.Documents.Add(new Document()
                 {
                     Name = "Mahlen nach Zahlen 3",
                     Link = "http://www.mahlennachzahlen.de",
-                    Module = _context.Modules.First(m => m.Name == "Karate mit Obst"),
-                    DocumentType = _context.DocumentTypes.First(d => d.Name == "PowerPoint")
+                    Module = _context.Modules.First(m => m.Name == "Karate mit Obst")
                 });
 
                 _context.Documents.Add(new Document()
                 {
                     Name = "Mahlen nach Zahlen 4",
                     Link = "http://www.mahlennachzahlen.de",
-                    Module = _context.Modules.First(m => m.Name == "Hangover Basics"),
-                    DocumentType = _context.DocumentTypes.First(d => d.Name == "Video")
+                    Module = _context.Modules.First(m => m.Name == "Hangover Basics")
                 });
 
                 _context.Documents.Add(new Document()
                 {
                     Name = "Mahlen nach Zahlen 5",
                     Link = "http://www.mahlennachzahlen.de",
-                    Module = _context.Modules.First(m => m.Name == "Ernährungswissenschaften"),
-                    DocumentType = _context.DocumentTypes.First(d => d.Name == "Video")
+                    Module = _context.Modules.First(m => m.Name == "Ernährungswissenschaften")
                 });
                 _context.SaveChanges();
 
@@ -174,7 +153,7 @@ namespace ticketsystem_backend.Migrations
                 {
                     CreatedBy = _context.Users.First(u => u.FirstName == "Mirja"),
                     CreatedDate = DateTime.Now,
-                    TicketState = _context.TicketStates.First(ts => ts.Name == "offen"),
+                    TicketClosed = true,
                     Document = _context.Documents.First(d => d.Name == "Mahlen nach Zahlen 4")
                 });
 
@@ -182,7 +161,7 @@ namespace ticketsystem_backend.Migrations
                 {
                     CreatedBy = _context.Users.First(u => u.FirstName == "Alexander"),
                     CreatedDate = DateTime.Now,
-                    TicketState = _context.TicketStates.First(ts => ts.Name == "offen"),
+                    TicketClosed = true,
                     Document = _context.Documents.First(d => d.Name == "Mahlen nach Zahlen 3")
                 });
 
@@ -190,7 +169,7 @@ namespace ticketsystem_backend.Migrations
                 {
                     CreatedBy = _context.Users.First(u => u.FirstName == "Janina"),
                     CreatedDate = DateTime.Now,
-                    TicketState = _context.TicketStates.First(ts => ts.Name == "geschlossen"),
+                    TicketClosed = false,
                     Document = _context.Documents.First(d => d.Name == "Mahlen nach Zahlen 2")
                 });
 
@@ -198,7 +177,7 @@ namespace ticketsystem_backend.Migrations
                 {
                     CreatedBy = _context.Users.First(u => u.FirstName == "Michael"),
                     CreatedDate = DateTime.Now,
-                    TicketState = _context.TicketStates.First(ts => ts.Name == "offen"),
+                    TicketClosed = false,
                     Document = _context.Documents.First(d => d.Name == "Mahlen nach Zahlen 1")
                 });
 

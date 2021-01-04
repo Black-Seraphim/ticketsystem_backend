@@ -9,7 +9,7 @@ namespace ticketsystem_backend.Models
     {
         public int Id { get; set; }
         public Document Document { get; set; }
-        public TicketState TicketState { get; set; }
+        public bool TicketClosed { get; set; }
         public User CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public User LastChangedBy { get; set; }

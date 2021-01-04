@@ -54,9 +54,6 @@ namespace ticketsystem_backend.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int?>("DocumentTypeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Link")
                         .HasColumnType("nvarchar(max)");
 
@@ -68,26 +65,9 @@ namespace ticketsystem_backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DocumentTypeId");
-
                     b.HasIndex("ModuleId");
 
                     b.ToTable("Documents");
-                });
-
-            modelBuilder.Entity("ticketsystem_backend.Models.DocumentType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DocumentTypes");
                 });
 
             modelBuilder.Entity("ticketsystem_backend.Models.Module", b =>
@@ -147,8 +127,8 @@ namespace ticketsystem_backend.Migrations
                     b.Property<DateTime>("LastChangedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("TicketStateId")
-                        .HasColumnType("int");
+                    b.Property<bool>("TicketClosed")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -158,24 +138,7 @@ namespace ticketsystem_backend.Migrations
 
                     b.HasIndex("LastChangedById");
 
-                    b.HasIndex("TicketStateId");
-
                     b.ToTable("Tickets");
-                });
-
-            modelBuilder.Entity("ticketsystem_backend.Models.TicketState", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TicketStates");
                 });
 
             modelBuilder.Entity("ticketsystem_backend.Models.User", b =>
@@ -221,15 +184,9 @@ namespace ticketsystem_backend.Migrations
 
             modelBuilder.Entity("ticketsystem_backend.Models.Document", b =>
                 {
-                    b.HasOne("ticketsystem_backend.Models.DocumentType", "DocumentType")
-                        .WithMany()
-                        .HasForeignKey("DocumentTypeId");
-
                     b.HasOne("ticketsystem_backend.Models.Module", "Module")
                         .WithMany()
                         .HasForeignKey("ModuleId");
-
-                    b.Navigation("DocumentType");
 
                     b.Navigation("Module");
                 });
@@ -257,17 +214,11 @@ namespace ticketsystem_backend.Migrations
                         .WithMany()
                         .HasForeignKey("LastChangedById");
 
-                    b.HasOne("ticketsystem_backend.Models.TicketState", "TicketState")
-                        .WithMany()
-                        .HasForeignKey("TicketStateId");
-
                     b.Navigation("CreatedBy");
 
                     b.Navigation("Document");
 
                     b.Navigation("LastChangedBy");
-
-                    b.Navigation("TicketState");
                 });
 
             modelBuilder.Entity("ticketsystem_backend.Models.User", b =>
