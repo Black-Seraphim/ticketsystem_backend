@@ -10,7 +10,7 @@ using ticketsystem_backend.Data;
 namespace ticketsystem_backend.Migrations
 {
     [DbContext(typeof(TicketSystemDbContext))]
-    [Migration("20210104214746_CreateTables")]
+    [Migration("20210108200907_CreateTables")]
     partial class CreateTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

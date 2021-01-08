@@ -12,51 +12,49 @@ namespace ticketsystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TicketsController : ControllerBase
+    public class ModulesController : ControllerBase
     {
         private readonly TicketSystemDbContext _context;
 
-        public TicketsController(TicketSystemDbContext context)
+        public ModulesController(TicketSystemDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Tickets
+        // GET: api/Modules
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Ticket>>> GetTicket()
+        public async Task<ActionResult<IEnumerable<Module>>> GetModules()
         {
-            return await _context.Tickets
-                .Include(t => t.CreatedBy)
-                .Include(t => t.Document)
-                .Include(t => t.LastChangedBy)
+            return await _context.Modules
+                .Include(m => m.Responsible)
                 .ToListAsync();
         }
 
-        // GET: api/Tickets/5
+        // GET: api/Modules/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Ticket>> GetTicket(int id)
+        public async Task<ActionResult<Module>> GetModule(int id)
         {
-            var ticket = await _context.Tickets.FindAsync(id);
+            var @module = await _context.Modules.FindAsync(id);
 
-            if (ticket == null)
+            if (@module == null)
             {
                 return NotFound();
             }
 
-            return ticket;
+            return @module;
         }
 
-        // PUT: api/Tickets/5
+        // PUT: api/Modules/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTicket(int id, Ticket ticket)
+        public async Task<IActionResult> PutModule(int id, Module @module)
         {
-            if (id != ticket.Id)
+            if (id != @module.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(ticket).State = EntityState.Modified;
+            _context.Entry(@module).State = EntityState.Modified;
 
             try
             {
@@ -64,7 +62,7 @@ namespace ticketsystem_backend.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TicketExists(id))
+                if (!ModuleExists(id))
                 {
                     return NotFound();
                 }
@@ -77,36 +75,36 @@ namespace ticketsystem_backend.Controllers
             return NoContent();
         }
 
-        // POST: api/Tickets
+        // POST: api/Modules
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Ticket>> PostTicket(Ticket ticket)
+        public async Task<ActionResult<Module>> PostModule(Module @module)
         {
-            _context.Tickets.Add(ticket);
+            _context.Modules.Add(@module);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTicket", new { id = ticket.Id }, ticket);
+            return CreatedAtAction("GetModule", new { id = @module.Id }, @module);
         }
 
-        // DELETE: api/Tickets/5
+        // DELETE: api/Modules/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTicket(int id)
+        public async Task<IActionResult> DeleteModule(int id)
         {
-            var ticket = await _context.Tickets.FindAsync(id);
-            if (ticket == null)
+            var @module = await _context.Modules.FindAsync(id);
+            if (@module == null)
             {
                 return NotFound();
             }
 
-            _context.Tickets.Remove(ticket);
+            _context.Modules.Remove(@module);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool TicketExists(int id)
+        private bool ModuleExists(int id)
         {
-            return _context.Tickets.Any(e => e.Id == id);
+            return _context.Modules.Any(e => e.Id == id);
         }
     }
 }

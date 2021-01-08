@@ -12,51 +12,50 @@ namespace ticketsystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TicketsController : ControllerBase
+    public class CommentsController : ControllerBase
     {
         private readonly TicketSystemDbContext _context;
 
-        public TicketsController(TicketSystemDbContext context)
+        public CommentsController(TicketSystemDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Tickets
+        // GET: api/Comments
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Ticket>>> GetTicket()
+        public async Task<ActionResult<IEnumerable<Comment>>> GetComments()
         {
-            return await _context.Tickets
-                .Include(t => t.CreatedBy)
-                .Include(t => t.Document)
-                .Include(t => t.LastChangedBy)
+            return await _context.Comments
+                .Include(c => c.CreatedBy)
+                .Include(c => c.Ticket)
                 .ToListAsync();
         }
 
-        // GET: api/Tickets/5
+        // GET: api/Comments/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Ticket>> GetTicket(int id)
+        public async Task<ActionResult<Comment>> GetComment(int id)
         {
-            var ticket = await _context.Tickets.FindAsync(id);
+            var comment = await _context.Comments.FindAsync(id);
 
-            if (ticket == null)
+            if (comment == null)
             {
                 return NotFound();
             }
 
-            return ticket;
+            return comment;
         }
 
-        // PUT: api/Tickets/5
+        // PUT: api/Comments/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTicket(int id, Ticket ticket)
+        public async Task<IActionResult> PutComment(int id, Comment comment)
         {
-            if (id != ticket.Id)
+            if (id != comment.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(ticket).State = EntityState.Modified;
+            _context.Entry(comment).State = EntityState.Modified;
 
             try
             {
@@ -64,7 +63,7 @@ namespace ticketsystem_backend.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TicketExists(id))
+                if (!CommentExists(id))
                 {
                     return NotFound();
                 }
@@ -77,36 +76,36 @@ namespace ticketsystem_backend.Controllers
             return NoContent();
         }
 
-        // POST: api/Tickets
+        // POST: api/Comments
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Ticket>> PostTicket(Ticket ticket)
+        public async Task<ActionResult<Comment>> PostComment(Comment comment)
         {
-            _context.Tickets.Add(ticket);
+            _context.Comments.Add(comment);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTicket", new { id = ticket.Id }, ticket);
+            return CreatedAtAction("GetComment", new { id = comment.Id }, comment);
         }
 
-        // DELETE: api/Tickets/5
+        // DELETE: api/Comments/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTicket(int id)
+        public async Task<IActionResult> DeleteComment(int id)
         {
-            var ticket = await _context.Tickets.FindAsync(id);
-            if (ticket == null)
+            var comment = await _context.Comments.FindAsync(id);
+            if (comment == null)
             {
                 return NotFound();
             }
 
-            _context.Tickets.Remove(ticket);
+            _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool TicketExists(int id)
+        private bool CommentExists(int id)
         {
-            return _context.Tickets.Any(e => e.Id == id);
+            return _context.Comments.Any(e => e.Id == id);
         }
     }
 }

@@ -12,51 +12,49 @@ namespace ticketsystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TicketsController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly TicketSystemDbContext _context;
 
-        public TicketsController(TicketSystemDbContext context)
+        public UsersController(TicketSystemDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Tickets
+        // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Ticket>>> GetTicket()
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _context.Tickets
-                .Include(t => t.CreatedBy)
-                .Include(t => t.Document)
-                .Include(t => t.LastChangedBy)
+            return await _context.Users
+                .Include(u => u.Role)
                 .ToListAsync();
         }
 
-        // GET: api/Tickets/5
+        // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Ticket>> GetTicket(int id)
+        public async Task<ActionResult<User>> GetUser(int id)
         {
-            var ticket = await _context.Tickets.FindAsync(id);
+            var user = await _context.Users.FindAsync(id);
 
-            if (ticket == null)
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return ticket;
+            return user;
         }
 
-        // PUT: api/Tickets/5
+        // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTicket(int id, Ticket ticket)
+        public async Task<IActionResult> PutUser(int id, User user)
         {
-            if (id != ticket.Id)
+            if (id != user.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(ticket).State = EntityState.Modified;
+            _context.Entry(user).State = EntityState.Modified;
 
             try
             {
@@ -64,7 +62,7 @@ namespace ticketsystem_backend.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TicketExists(id))
+                if (!UserExists(id))
                 {
                     return NotFound();
                 }
@@ -77,36 +75,36 @@ namespace ticketsystem_backend.Controllers
             return NoContent();
         }
 
-        // POST: api/Tickets
+        // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Ticket>> PostTicket(Ticket ticket)
+        public async Task<ActionResult<User>> PostUser(User user)
         {
-            _context.Tickets.Add(ticket);
+            _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTicket", new { id = ticket.Id }, ticket);
+            return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
-        // DELETE: api/Tickets/5
+        // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTicket(int id)
+        public async Task<IActionResult> DeleteUser(int id)
         {
-            var ticket = await _context.Tickets.FindAsync(id);
-            if (ticket == null)
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            _context.Tickets.Remove(ticket);
+            _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool TicketExists(int id)
+        private bool UserExists(int id)
         {
-            return _context.Tickets.Any(e => e.Id == id);
+            return _context.Users.Any(e => e.Id == id);
         }
     }
 }

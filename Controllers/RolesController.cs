@@ -12,51 +12,47 @@ namespace ticketsystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TicketsController : ControllerBase
+    public class RolesController : ControllerBase
     {
         private readonly TicketSystemDbContext _context;
 
-        public TicketsController(TicketSystemDbContext context)
+        public RolesController(TicketSystemDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Tickets
+        // GET: api/Roles
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Ticket>>> GetTicket()
+        public async Task<ActionResult<IEnumerable<Role>>> GetRoles()
         {
-            return await _context.Tickets
-                .Include(t => t.CreatedBy)
-                .Include(t => t.Document)
-                .Include(t => t.LastChangedBy)
-                .ToListAsync();
+            return await _context.Roles.ToListAsync();
         }
 
-        // GET: api/Tickets/5
+        // GET: api/Roles/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Ticket>> GetTicket(int id)
+        public async Task<ActionResult<Role>> GetRole(int id)
         {
-            var ticket = await _context.Tickets.FindAsync(id);
+            var role = await _context.Roles.FindAsync(id);
 
-            if (ticket == null)
+            if (role == null)
             {
                 return NotFound();
             }
 
-            return ticket;
+            return role;
         }
 
-        // PUT: api/Tickets/5
+        // PUT: api/Roles/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTicket(int id, Ticket ticket)
+        public async Task<IActionResult> PutRole(int id, Role role)
         {
-            if (id != ticket.Id)
+            if (id != role.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(ticket).State = EntityState.Modified;
+            _context.Entry(role).State = EntityState.Modified;
 
             try
             {
@@ -64,7 +60,7 @@ namespace ticketsystem_backend.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TicketExists(id))
+                if (!RoleExists(id))
                 {
                     return NotFound();
                 }
@@ -77,36 +73,36 @@ namespace ticketsystem_backend.Controllers
             return NoContent();
         }
 
-        // POST: api/Tickets
+        // POST: api/Roles
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Ticket>> PostTicket(Ticket ticket)
+        public async Task<ActionResult<Role>> PostRole(Role role)
         {
-            _context.Tickets.Add(ticket);
+            _context.Roles.Add(role);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTicket", new { id = ticket.Id }, ticket);
+            return CreatedAtAction("GetRole", new { id = role.Id }, role);
         }
 
-        // DELETE: api/Tickets/5
+        // DELETE: api/Roles/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTicket(int id)
+        public async Task<IActionResult> DeleteRole(int id)
         {
-            var ticket = await _context.Tickets.FindAsync(id);
-            if (ticket == null)
+            var role = await _context.Roles.FindAsync(id);
+            if (role == null)
             {
                 return NotFound();
             }
 
-            _context.Tickets.Remove(ticket);
+            _context.Roles.Remove(role);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool TicketExists(int id)
+        private bool RoleExists(int id)
         {
-            return _context.Tickets.Any(e => e.Id == id);
+            return _context.Roles.Any(e => e.Id == id);
         }
     }
 }

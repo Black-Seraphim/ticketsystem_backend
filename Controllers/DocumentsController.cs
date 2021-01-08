@@ -12,51 +12,49 @@ namespace ticketsystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TicketsController : ControllerBase
+    public class DocumentsController : ControllerBase
     {
         private readonly TicketSystemDbContext _context;
 
-        public TicketsController(TicketSystemDbContext context)
+        public DocumentsController(TicketSystemDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Tickets
+        // GET: api/Documents
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Ticket>>> GetTicket()
+        public async Task<ActionResult<IEnumerable<Document>>> GetDocuments()
         {
-            return await _context.Tickets
-                .Include(t => t.CreatedBy)
-                .Include(t => t.Document)
-                .Include(t => t.LastChangedBy)
+            return await _context.Documents
+                .Include(d => d.Module)
                 .ToListAsync();
         }
 
-        // GET: api/Tickets/5
+        // GET: api/Documents/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Ticket>> GetTicket(int id)
+        public async Task<ActionResult<Document>> GetDocument(int id)
         {
-            var ticket = await _context.Tickets.FindAsync(id);
+            var document = await _context.Documents.FindAsync(id);
 
-            if (ticket == null)
+            if (document == null)
             {
                 return NotFound();
             }
 
-            return ticket;
+            return document;
         }
 
-        // PUT: api/Tickets/5
+        // PUT: api/Documents/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTicket(int id, Ticket ticket)
+        public async Task<IActionResult> PutDocument(int id, Document document)
         {
-            if (id != ticket.Id)
+            if (id != document.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(ticket).State = EntityState.Modified;
+            _context.Entry(document).State = EntityState.Modified;
 
             try
             {
@@ -64,7 +62,7 @@ namespace ticketsystem_backend.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TicketExists(id))
+                if (!DocumentExists(id))
                 {
                     return NotFound();
                 }
@@ -77,36 +75,36 @@ namespace ticketsystem_backend.Controllers
             return NoContent();
         }
 
-        // POST: api/Tickets
+        // POST: api/Documents
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Ticket>> PostTicket(Ticket ticket)
+        public async Task<ActionResult<Document>> PostDocument(Document document)
         {
-            _context.Tickets.Add(ticket);
+            _context.Documents.Add(document);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTicket", new { id = ticket.Id }, ticket);
+            return CreatedAtAction("GetDocument", new { id = document.Id }, document);
         }
 
-        // DELETE: api/Tickets/5
+        // DELETE: api/Documents/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTicket(int id)
+        public async Task<IActionResult> DeleteDocument(int id)
         {
-            var ticket = await _context.Tickets.FindAsync(id);
-            if (ticket == null)
+            var document = await _context.Documents.FindAsync(id);
+            if (document == null)
             {
                 return NotFound();
             }
 
-            _context.Tickets.Remove(ticket);
+            _context.Documents.Remove(document);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool TicketExists(int id)
+        private bool DocumentExists(int id)
         {
-            return _context.Tickets.Any(e => e.Id == id);
+            return _context.Documents.Any(e => e.Id == id);
         }
     }
 }
