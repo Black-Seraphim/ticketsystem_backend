@@ -26,9 +26,9 @@ namespace ticketsystem_backend.Controllers
         public async Task<ActionResult<IEnumerable<Ticket>>> GetTicket()
         {
             return await _context.Tickets
-                .Include(t => t.CreatedBy)
-                .Include(t => t.Document)
-                .Include(t => t.LastChangedBy)
+                .Include(t => t.CreatedBy).ThenInclude(c => c.Role)
+                .Include(t => t.Document).ThenInclude(d => d.Module).ThenInclude(m => m.Responsible).ThenInclude(r => r.Role)
+                .Include(t => t.LastChangedBy).ThenInclude(l => l.Role)
                 .ToListAsync();
         }
 
