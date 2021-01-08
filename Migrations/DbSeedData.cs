@@ -32,7 +32,7 @@ namespace ticketsystem_backend.Migrations
                 _context.Users.Add(new User()
                 {
                     FirstName = "Alexander",
-                    LastName = "Student",
+                    LastName = "Kathan",
                     PasswordHash = "sicher",
                     Role = _context.Roles.First(r => r.Name == "Student")
                 });
@@ -40,7 +40,7 @@ namespace ticketsystem_backend.Migrations
                 _context.Users.Add(new User()
                 {
                     FirstName = "Michael",
-                    LastName = "Student",
+                    LastName = "Ziaja",
                     PasswordHash = "sicher",
                     Role = _context.Roles.First(r => r.Name == "Student")
                 });
@@ -48,7 +48,7 @@ namespace ticketsystem_backend.Migrations
                 _context.Users.Add(new User()
                 {
                     FirstName = "Thomas",
-                    LastName = "Student",
+                    LastName = "Hetfeld",
                     PasswordHash = "sicher",
                     Role = _context.Roles.First(r => r.Name == "Student")
                 });
@@ -56,7 +56,7 @@ namespace ticketsystem_backend.Migrations
                 _context.Users.Add(new User()
                 {
                     FirstName = "Mirja",
-                    LastName = "Tutor",
+                    LastName = "Sirisko",
                     PasswordHash = "sicher",
                     Role = _context.Roles.First(r => r.Name == "Tutor")
                 });
@@ -64,7 +64,7 @@ namespace ticketsystem_backend.Migrations
                 _context.Users.Add(new User()
                 {
                     FirstName = "Janina",
-                    LastName = "Tutor",
+                    LastName = "Mantel",
                     PasswordHash = "sicher",
                     Role = _context.Roles.First(r => r.Name == "Tutor")
                 });
@@ -151,14 +151,20 @@ namespace ticketsystem_backend.Migrations
             {
                 _context.Tickets.Add(new Ticket()
                 {
+                    Title = "Inhalt total unverständlich",
+                    Description = "Bitte Abschnitt 3.2 neu formulieren",
                     CreatedBy = _context.Users.First(u => u.FirstName == "Mirja"),
                     CreatedDate = DateTime.Now,
                     TicketClosed = true,
-                    Document = _context.Documents.First(d => d.Name == "Mahlen nach Zahlen 4")
+                    Document = _context.Documents.First(d => d.Name == "Mahlen nach Zahlen 4"),
+                    LastChangedBy = _context.Users.First(u => u.FirstName == "Janina"),
+                    LastChangedDate = DateTime.Now
                 });
 
                 _context.Tickets.Add(new Ticket()
                 {
+                    Title = "Inhalt unverständlich",
+                    Description = "Bitte Abschnitt 3.2 neu formulieren",
                     CreatedBy = _context.Users.First(u => u.FirstName == "Alexander"),
                     CreatedDate = DateTime.Now,
                     TicketClosed = true,
@@ -167,6 +173,8 @@ namespace ticketsystem_backend.Migrations
 
                 _context.Tickets.Add(new Ticket()
                 {
+                    Title = "Inhalt unverständlich",
+                    Description = "Bitte Abschnitt 3.2 neu formulieren",
                     CreatedBy = _context.Users.First(u => u.FirstName == "Janina"),
                     CreatedDate = DateTime.Now,
                     TicketClosed = false,
@@ -175,6 +183,8 @@ namespace ticketsystem_backend.Migrations
 
                 _context.Tickets.Add(new Ticket()
                 {
+                    Title = "Inhalt unverständlich",
+                    Description = "Bitte Abschnitt 3.2 neu formulieren",
                     CreatedBy = _context.Users.First(u => u.FirstName == "Michael"),
                     CreatedDate = DateTime.Now,
                     TicketClosed = false,
@@ -182,6 +192,17 @@ namespace ticketsystem_backend.Migrations
                 });
 
                 _context.SaveChanges();
+            }
+
+            if (!_context.Comments.Any())
+            {
+                _context.Comments.Add(new Comment()
+                {
+                    CreatedBy = _context.Users.First(u => u.FirstName == "Michael"),
+                    CreatedDate = DateTime.Now,
+                    Text = "Lern doch einfach lesen, oder zieh Dir ne Brille an!",
+                    Ticket = _context.Tickets.First(t => t.Title == "Inhalt total unverständlich")
+                });
             }
         }
     }
