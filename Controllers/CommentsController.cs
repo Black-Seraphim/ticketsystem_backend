@@ -26,8 +26,10 @@ namespace ticketsystem_backend.Controllers
         public async Task<ActionResult<IEnumerable<Comment>>> GetComments()
         {
             return await _context.Comments
-                .Include(c => c.CreatedBy)
-                .Include(c => c.Ticket)
+                .Include(c => c.CreatedBy.Role)
+                .Include(c => c.Ticket.Document.Module.Responsible.Role)
+                .Include(c => c.Ticket.CreatedBy.Role)
+                .Include(c => c.Ticket.LastChangedBy.Role)
                 .ToListAsync();
         }
 
