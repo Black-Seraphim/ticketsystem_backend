@@ -26,7 +26,7 @@ namespace ticketsystem_backend.Controllers
         public async Task<ActionResult<IEnumerable<Document>>> GetDocuments()
         {
             return await _context.Documents
-                .Include(d => d.Module)
+                .Include(d => d.Module.Responsible.Role)
                 .ToListAsync();
         }
 
