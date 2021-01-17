@@ -12,6 +12,7 @@ namespace ticketsystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[EnableCors(origins: "*", headers: "*", methods: "*")]
     public class TicketsController : ControllerBase
     {
         private readonly TicketSystemDbContext _context;
