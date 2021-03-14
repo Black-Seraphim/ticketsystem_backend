@@ -35,7 +35,7 @@ namespace ticketsystem_backend.Controllers
 
         // GET: api/Tickets/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Ticket>> GetTicket(int id)
+        public async Task<ActionResult<TicketVM>> GetTicket(int id)
         {
             var ticket = await _context.Tickets.FindAsync(id);
 
@@ -44,7 +44,23 @@ namespace ticketsystem_backend.Controllers
                 return NotFound();
             }
 
-            return ticket;
+            List<Comment> comments = _context.Comments.Where(c => c.Ticket.Id == ticket.Id).ToList();
+
+            TicketVM ticketVM = new TicketVM()
+            {
+                Id = ticket.Id,
+                CreatedBy = ticket.CreatedBy,
+                CreatedDate = ticket.CreatedDate,
+                Description = ticket.Description,
+                Document = ticket.Document,
+                LastChangedBy = ticket.LastChangedBy,
+                LastChangedDate = ticket.LastChangedDate,
+                TicketClosed = ticket.TicketClosed,
+                Title = ticket.Title,
+                Comments = comments
+            };
+
+            return ticketVM;
         }
 
         // PUT: api/Tickets/5
