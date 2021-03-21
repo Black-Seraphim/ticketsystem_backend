@@ -32,10 +32,16 @@ namespace ticketsystem_backend.Controllers
                 return BadRequest("Invalid client request");
             }
 
-            if (UserExist(user.UserName) && PasswordVaild(user.UserName, user.Password))
+            if (UserValidate(user.UserName, user.Password))
             {
                 var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
                 var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Role, GetUserRole(user.UserName).Name)
+                };
 
                 var tokenOptions = new JwtSecurityToken(
                     issuer: "https://localhost:5001",
@@ -52,16 +58,23 @@ namespace ticketsystem_backend.Controllers
             return Unauthorized();
         }
 
-        private bool PasswordVaild(string userName, string password)
+        private Role GetUserRole(string userName)
         {
-            User user = _context.Users.Where(u => u.LastName == userName).FirstOrDefault();
-            return user.PasswordHash == password;
+            User user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
+            Role role = _context.Roles.Where(r => r == user.Role).FirstOrDefault();
+            return role;
         }
 
-        private bool UserExist(string userName)
+        private bool UserValidate(string userName, string password)
         {
-            int userCount = _context.Users.Where(u => u.LastName == userName).Count();
-            return userCount > 1;
+            User user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            return user.Password == password;
         }
     }
 }

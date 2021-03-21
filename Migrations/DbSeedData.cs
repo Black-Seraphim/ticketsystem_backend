@@ -31,41 +31,36 @@ namespace ticketsystem_backend.Migrations
             {
                 _context.Users.Add(new User()
                 {
-                    FirstName = "Alexander",
-                    LastName = "Kathan",
-                    PasswordHash = "sicher",
+                    UserName = "Alexander.Kathan@iubh-fernstudium.de",
+                    Password = "sicher",
                     Role = _context.Roles.First(r => r.Name == "Student")
                 });
 
                 _context.Users.Add(new User()
                 {
-                    FirstName = "Michael",
-                    LastName = "Ziaja",
-                    PasswordHash = "sicher",
+                    UserName = "Michael.Ziaja@iubh-fernstudium.de",
+                    Password = "sicher",
                     Role = _context.Roles.First(r => r.Name == "Student")
                 });
 
                 _context.Users.Add(new User()
                 {
-                    FirstName = "Thomas",
-                    LastName = "Hetfeld",
-                    PasswordHash = "sicher",
+                    UserName = "Thomas.Hetfeld@iubh-fernstudium.de",
+                    Password = "sicher",
                     Role = _context.Roles.First(r => r.Name == "Student")
                 });
 
                 _context.Users.Add(new User()
                 {
-                    FirstName = "Mirja",
-                    LastName = "Sirisko",
-                    PasswordHash = "sicher",
+                    UserName = "Mirja.Sirisko@iubh-fernstudium.de",
+                    Password = "sicher",
                     Role = _context.Roles.First(r => r.Name == "Tutor")
                 });
 
                 _context.Users.Add(new User()
                 {
-                    FirstName = "Janina",
-                    LastName = "Mantel",
-                    PasswordHash = "sicher",
+                    UserName = "Janina.Mantel@iubh-fernstudium.de",
+                    Password = "sicher",
                     Role = _context.Roles.First(r => r.Name == "Tutor")
                 });
              
@@ -77,31 +72,31 @@ namespace ticketsystem_backend.Migrations
                 _context.Modules.Add(new Module()
                 {
                     Name = "Jodeln für Anfänger",
-                    Responsible = _context.Users.First(u => u.FirstName == "Mirja")
+                    Responsible = _context.Users.First(u => u.UserName == "Mirja.Sirisko@iubh-fernstudium.de")
                 });
 
                 _context.Modules.Add(new Module()
                 {
                     Name = "Diskuswerfen",
-                    Responsible = _context.Users.First(u => u.FirstName == "Janina")
+                    Responsible = _context.Users.First(u => u.UserName == "Janina.Mantel@iubh-fernstudium.de")
                 });
 
                 _context.Modules.Add(new Module()
                 {
                     Name = "Karate mit Obst",
-                    Responsible = _context.Users.First(u => u.FirstName == "Mirja")
+                    Responsible = _context.Users.First(u => u.UserName == "Mirja.Sirisko@iubh-fernstudium.de")
                 });
 
                 _context.Modules.Add(new Module()
                 {
                     Name = "Hangover Basics",
-                    Responsible = _context.Users.First(u => u.FirstName == "Janina")
+                    Responsible = _context.Users.First(u => u.UserName == "Janina.Mantel@iubh-fernstudium.de")
                 });
 
                 _context.Modules.Add(new Module()
                 {
                     Name = "Ernährungswissenschaften",
-                    Responsible = _context.Users.First(u => u.FirstName == "Mirja")
+                    Responsible = _context.Users.First(u => u.UserName == "Mirja.Sirisko@iubh-fernstudium.de")
                 });
 
                 _context.SaveChanges();
@@ -153,11 +148,11 @@ namespace ticketsystem_backend.Migrations
                 {
                     Title = "Inhalt total unverständlich",
                     Description = "Bitte Abschnitt 3.2 neu formulieren",
-                    CreatedBy = _context.Users.First(u => u.FirstName == "Mirja"),
+                    CreatedBy = _context.Users.First(u => u.UserName == "Mirja.Sirisko@iubh-fernstudium.de"),
                     CreatedDate = DateTime.Now,
                     TicketClosed = true,
                     Document = _context.Documents.First(d => d.Name == "Mahlen nach Zahlen 4"),
-                    LastChangedBy = _context.Users.First(u => u.FirstName == "Janina"),
+                    LastChangedBy = _context.Users.First(u => u.UserName == "Janina.Mantel@iubh-fernstudium.de"),
                     LastChangedDate = DateTime.Now
                 });
 
@@ -165,7 +160,7 @@ namespace ticketsystem_backend.Migrations
                 {
                     Title = "Inhalt unverständlich",
                     Description = "Bitte Abschnitt 3.2 neu formulieren",
-                    CreatedBy = _context.Users.First(u => u.FirstName == "Alexander"),
+                    CreatedBy = _context.Users.First(u => u.UserName == "Alexander.Kathan@iubh-fernstudium.de"),
                     CreatedDate = DateTime.Now,
                     TicketClosed = true,
                     Document = _context.Documents.First(d => d.Name == "Mahlen nach Zahlen 3")
@@ -175,7 +170,7 @@ namespace ticketsystem_backend.Migrations
                 {
                     Title = "Inhalt unverständlich",
                     Description = "Bitte Abschnitt 3.2 neu formulieren",
-                    CreatedBy = _context.Users.First(u => u.FirstName == "Janina"),
+                    CreatedBy = _context.Users.First(u => u.UserName == "Janina.Mantel@iubh-fernstudium.de"),
                     CreatedDate = DateTime.Now,
                     TicketClosed = false,
                     Document = _context.Documents.First(d => d.Name == "Mahlen nach Zahlen 2")
@@ -185,7 +180,7 @@ namespace ticketsystem_backend.Migrations
                 {
                     Title = "Inhalt unverständlich",
                     Description = "Bitte Abschnitt 3.2 neu formulieren",
-                    CreatedBy = _context.Users.First(u => u.FirstName == "Michael"),
+                    CreatedBy = _context.Users.First(u => u.UserName == "Michael.Ziaja@iubh-fernstudium.de"),
                     CreatedDate = DateTime.Now,
                     TicketClosed = false,
                     Document = _context.Documents.First(d => d.Name == "Mahlen nach Zahlen 1")
@@ -198,7 +193,7 @@ namespace ticketsystem_backend.Migrations
             {
                 _context.Comments.Add(new Comment()
                 {
-                    CreatedBy = _context.Users.First(u => u.FirstName == "Michael"),
+                    CreatedBy = _context.Users.First(u => u.UserName == "Michael.Ziaja@iubh-fernstudium.de"),
                     CreatedDate = DateTime.Now,
                     Text = "Lern doch einfach lesen, oder zieh Dir ne Brille an!",
                     Ticket = _context.Tickets.First(t => t.Title == "Inhalt total unverständlich")
