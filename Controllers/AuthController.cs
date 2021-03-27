@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using ticketsystem_backend.Data;
 using ticketsystem_backend.Models;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace ticketsystem_backend.Controllers
 {
@@ -47,7 +49,7 @@ namespace ticketsystem_backend.Controllers
                     issuer: "https://localhost:5001",
                     audience: "https://localhost:5001",
                     claims: claims,
-                    expires: DateTime.Now.AddMinutes(5),
+                    expires: DateTime.Now.AddMinutes(60),
                     signingCredentials: signingCredentials
                     );
 
@@ -60,7 +62,7 @@ namespace ticketsystem_backend.Controllers
 
         private Role GetUserRole(string userName)
         {
-            User user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
+            User user = _context.Users.Include(u => u.Role).Where(u => u.UserName == userName).FirstOrDefault();
             Role role = _context.Roles.Where(r => r == user.Role).FirstOrDefault();
             return role;
         }
