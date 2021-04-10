@@ -35,39 +35,40 @@ namespace ticketsystem_backend.Controllers
                 .ToListAsync();
         }
 
-        //// GET: api/CourseTickets/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<IEnumerable<Ticket>>> GetCourseTicket(int id)
-        //{
-        //    IEnumerable<Document> documents = _context.Documents.Where(d => d.Module.Id == id);
-        //    return await _context.Tickets.Where(t => documents.Contains(t.Document))
-        //        .Include(t => t.Document)
-        //        .Include(t => t.CreatedBy)
-        //        .ToListAsync();
-        //}
+        // GET: api/CourseTickets/5
+        [HttpGet("GetByCourseId/{id}")]
+        public async Task<ActionResult<IEnumerable<Ticket>>> GetCourseTicket(int id)
+        {
+            IEnumerable<Document> documents = _context.Documents.Where(d => d.Module.Id == id);
+            return await _context.Tickets.Where(t => documents.Contains(t.Document))
+                .Include(t => t.Document)
+                .Include(t => t.CreatedBy)
+                .ToListAsync();
+        }
 
-        //// GET: api/TutorTickets
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Ticket>>> GetTutorTicket()
-        //{
-        //    User user = new User(); // TODO: GetUser
-        //    IEnumerable<Module> modules = _context.Modules.Where(m => m.Responsible == user);
-        //    IEnumerable<Document> documents = _context.Documents.Where(d => modules.Contains(d.Module));
-        //    return await _context.Tickets.Where(t => documents.Contains(t.Document))
-        //        .Include(t => t.Document)
-        //        .Include(t => t.CreatedBy)
-        //        .ToListAsync();
-        //}
+        // GET: api/TutorTickets
+        [HttpGet("GetByTutor")]
+        public async Task<ActionResult<IEnumerable<Ticket>>> GetTutorTicket()
+        {
+            User user = new User(); // TODO: GetUser
+            IEnumerable<Module> modules = _context.Modules.Where(m => m.Responsible == user);
+            IEnumerable<Document> documents = _context.Documents.Where(d => modules.Contains(d.Module));
+            return await _context.Tickets.Where(t => documents.Contains(t.Document))
+                .Include(t => t.Document)
+                .Include(t => t.CreatedBy)
+                .ToListAsync();
+        }
 
-        //// GET: api/UserTickets
-        //public async Task<ActionResult<IEnumerable<Ticket>>> GetUserTicket()
-        //{
-        //    User user = new User(); // TODO: GetUser
-        //    return await _context.Tickets.Where(t => t.CreatedBy == user)
-        //        .Include(t => t.Document)
-        //        .Include(t => t.CreatedBy)
-        //        .ToListAsync();
-        //}
+        // GET: api/UserTickets
+        [HttpGet("GetByUser")]
+        public async Task<ActionResult<IEnumerable<Ticket>>> GetUserTicket()
+        {
+            User user = new User(); // TODO: GetUser
+            return await _context.Tickets.Where(t => t.CreatedBy == user)
+                .Include(t => t.Document)
+                .Include(t => t.CreatedBy)
+                .ToListAsync();
+        }
 
         // GET: api/Tickets/5
         [HttpGet("{id}")]
@@ -136,13 +137,15 @@ namespace ticketsystem_backend.Controllers
         public async Task<ActionResult<Ticket>> PostTicket(Ticket ticket)
         {
             var loggedUser = HttpContext.User;
+            var test = loggedUser.FindFirst(ClaimTypes.Name);
+            
             User user = new User();
 
             ticket.CreatedBy = user;
             ticket.CreatedDate = DateTime.Now;
             ticket.LastChangedBy = null;
             ticket.TicketClosed = false;
-            
+
             _context.Tickets.Add(ticket);
             await _context.SaveChangesAsync();
 

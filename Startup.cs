@@ -68,7 +68,8 @@ namespace ticketsystem_backend
                     
                     ValidIssuer = "https://localhost:5001",
                     ValidAudience = "https://localhost:5001",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecrectKey@345"))
+                    IssuerSigningKey = new SymmetricSecurityKey(Base64UrlEncoder.DecodeBytes("superSecrectKey@345"))
+                    //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecrectKey@345"))
                 };
             });
         }

@@ -36,7 +36,8 @@ namespace ticketsystem_backend.Controllers
 
             if (UserValidate(user.UserName, user.Password))
             {
-                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
+                var secretKey = new SymmetricSecurityKey(Base64UrlEncoder.DecodeBytes("superSecretKey@345"));
+                //var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
                 var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
                 var claims = new List<Claim>
