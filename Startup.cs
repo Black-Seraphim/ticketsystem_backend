@@ -29,15 +29,6 @@ namespace ticketsystem_backend
 
         public IConfiguration Configuration { get; }
 
-
-        //public static void Register(HttpConfiguration config)
-        //{
-        //    // New code
-        //    config.EnableCors();
-        //}
-
-
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -74,7 +65,7 @@ namespace ticketsystem_backend
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-
+                    
                     ValidIssuer = "https://localhost:5001",
                     ValidAudience = "https://localhost:5001",
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecrectKey@345"))

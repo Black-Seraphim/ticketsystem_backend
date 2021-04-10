@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +14,7 @@ namespace ticketsystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[EnableCors(origins: "*", headers: "*", methods: "*")]
+    [Authorize]
     public class TicketsController : ControllerBase
     {
         private readonly TicketSystemDbContext _context;
@@ -30,6 +32,39 @@ namespace ticketsystem_backend.Controllers
                 .Include(t => t.Document.Module.Responsible.Role)
                 .Include(t => t.CreatedBy.Role)
                 .Include(t => t.LastChangedBy.Role)
+                .ToListAsync();
+        }
+
+        // GET: api/CourseTickets/5
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Ticket>>> GetCourseTicket(int id)
+        {
+            IEnumerable<Document> documents = _context.Documents.Where(d => d.Module.Id == id);
+            return await _context.Tickets.Where(t => documents.Contains(t.Document))
+                .Include(t => t.Document)
+                .Include(t => t.CreatedBy)
+                .ToListAsync();
+        }
+
+        // GET: api/CourseTickets/5
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Ticket>>> GetTutorTicket()
+        {
+            User user = new User(); // TODO: GetUser
+            IEnumerable<Module> modules = _context.Modules.Where(m => m.Responsible == user);
+            IEnumerable<Document> documents = _context.Documents.Where(d => modules.Contains(d.Module));
+            return await _context.Tickets.Where(t => documents.Contains(t.Document))
+                .Include(t => t.Document)
+                .Include(t => t.CreatedBy)
+                .ToListAsync();
+        }
+
+        public async Task<ActionResult<IEnumerable<Ticket>>> GetUserTicket()
+        {
+            User user = new User(); // TODO: GetUser
+            return await _context.Tickets.Where(t => t.CreatedBy == user)
+                .Include(t => t.Document)
+                .Include(t => t.CreatedBy)
                 .ToListAsync();
         }
 
@@ -99,6 +134,14 @@ namespace ticketsystem_backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Ticket>> PostTicket(Ticket ticket)
         {
+            var loggedUser = HttpContext.User;
+            User user = new User();
+
+            ticket.CreatedBy = user;
+            ticket.CreatedDate = DateTime.Now;
+            ticket.LastChangedBy = null;
+            ticket.TicketClosed = false;
+            
             _context.Tickets.Add(ticket);
             await _context.SaveChangesAsync();
 
