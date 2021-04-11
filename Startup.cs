@@ -66,10 +66,9 @@ namespace ticketsystem_backend
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     
-                    ValidIssuer = "https://localhost:5001",
-                    ValidAudience = "https://localhost:5001",
-                    IssuerSigningKey = new SymmetricSecurityKey(Base64UrlEncoder.DecodeBytes("superSecrectKey@345"))
-                    //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecrectKey@345"))
+                    ValidIssuer = "*",
+                    ValidAudience = "*",
+                    IssuerSigningKey = new SymmetricSecurityKey(Base64UrlEncoder.DecodeBytes("MBcCT4UEs67vh3shK683Lxhn33t2LTtH"))
                 };
             });
         }

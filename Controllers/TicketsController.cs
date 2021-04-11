@@ -50,7 +50,9 @@ namespace ticketsystem_backend.Controllers
         [HttpGet("GetByTutor")]
         public async Task<ActionResult<IEnumerable<Ticket>>> GetTutorTicket()
         {
-            User user = new User(); // TODO: GetUser
+            ClaimsPrincipal loggedUser = HttpContext.User;
+            string userName = loggedUser.FindFirst(ClaimTypes.Name).ToString();
+            User user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
             IEnumerable<Module> modules = _context.Modules.Where(m => m.Responsible == user);
             IEnumerable<Document> documents = _context.Documents.Where(d => modules.Contains(d.Module));
             return await _context.Tickets.Where(t => documents.Contains(t.Document))
@@ -63,13 +65,16 @@ namespace ticketsystem_backend.Controllers
         [HttpGet("GetByUser")]
         public async Task<ActionResult<IEnumerable<Ticket>>> GetUserTicket()
         {
-            User user = new User(); // TODO: GetUser
+            ClaimsPrincipal loggedUser = HttpContext.User;
+            string userName = loggedUser.FindFirst(ClaimTypes.Name).ToString();
+            User user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
             return await _context.Tickets.Where(t => t.CreatedBy == user)
                 .Include(t => t.Document)
                 .Include(t => t.CreatedBy)
                 .ToListAsync();
         }
 
+        
         // GET: api/Tickets/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TicketVM>> GetTicket(int id)
@@ -103,6 +108,7 @@ namespace ticketsystem_backend.Controllers
         // PUT: api/Tickets/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Tutor")]
         public async Task<IActionResult> PutTicket(int id, Ticket ticket)
         {
             if (id != ticket.Id)
@@ -136,20 +142,47 @@ namespace ticketsystem_backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Ticket>> PostTicket(Ticket ticket)
         {
-            var loggedUser = HttpContext.User;
-            var test = loggedUser.FindFirst(ClaimTypes.Name);
-            
-            User user = new User();
+            ClaimsPrincipal loggedUser = HttpContext.User;
+            string userName = loggedUser.FindFirst(ClaimTypes.Name).ToString();
+            User user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
 
             ticket.CreatedBy = user;
             ticket.CreatedDate = DateTime.Now;
-            ticket.LastChangedBy = null;
+            ticket.LastChangedBy = user;
+            ticket.LastChangedDate = DateTime.Now;
             ticket.TicketClosed = false;
 
             _context.Tickets.Add(ticket);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTicket", new { id = ticket.Id }, ticket);
+        }
+
+        // GET: api/UserTickets
+        [HttpPost("ChangeStatus/{id}")]
+        [Authorize(Roles = "Tutor")]
+        public async Task<ActionResult<IEnumerable<Ticket>>> ChangeTicketStatus(int id)
+        {
+            ClaimsPrincipal loggedUser = HttpContext.User;
+            string userName = loggedUser.FindFirst(ClaimTypes.Name).ToString();
+            User user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
+
+            Ticket ticket = _context.Tickets.Find(id);
+
+            if (ticket == null)
+            {
+                return BadRequest();
+            }
+
+            ticket.TicketClosed = !ticket.TicketClosed;
+            ticket.LastChangedBy = user;
+            ticket.LastChangedDate = DateTime.Now;
+
+            _context.Tickets.Update(ticket);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+               
         }
 
         // DELETE: api/Tickets/5

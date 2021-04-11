@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -85,18 +86,17 @@ namespace ticketsystem_backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Comment>> PostComment(Comment comment)
         {
-            Comment newComment = new Comment
-            {
-                // TODO: implement user
-                //CreatedBy = HttpContext.User,
-                CreatedDate = DateTime.Now,
-                Text = comment.Text,
-                Ticket = comment.Ticket
-            };
-            _context.Comments.Add(newComment);
+            ClaimsPrincipal loggedUser = HttpContext.User;
+            string userName = loggedUser.FindFirst(ClaimTypes.Name).ToString();
+            User user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
+
+            comment.CreatedBy = user;
+            comment.CreatedDate = DateTime.Now;
+            
+            _context.Comments.Add(comment);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetComment", new { id = comment.Id }, newComment);
+            return CreatedAtAction("GetComment", new { id = comment.Id }, comment);
         }
 
         //// DELETE: api/Comments/5

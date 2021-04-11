@@ -36,8 +36,7 @@ namespace ticketsystem_backend.Controllers
 
             if (UserValidate(user.UserName, user.Password))
             {
-                var secretKey = new SymmetricSecurityKey(Base64UrlEncoder.DecodeBytes("superSecretKey@345"));
-                //var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
+                var secretKey = new SymmetricSecurityKey(Base64UrlEncoder.DecodeBytes("MBcCT4UEs67vh3shK683Lxhn33t2LTtH"));
                 var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
                 var claims = new List<Claim>
@@ -47,11 +46,11 @@ namespace ticketsystem_backend.Controllers
                 };
 
                 var tokenOptions = new JwtSecurityToken(
-                    issuer: "https://localhost:5001",
-                    audience: "https://localhost:5001",
+                    issuer: "*",
+                    audience: "*",
                     claims: claims,
                     expires: DateTime.Now.AddMinutes(60),
-                    signingCredentials: signingCredentials
+                    signingCredentials: signingCredentials                    
                     );
 
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
