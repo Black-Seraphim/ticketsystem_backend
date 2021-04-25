@@ -140,17 +140,24 @@ namespace ticketsystem_backend.Controllers
         // POST: api/Tickets
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Ticket>> PostTicket(Ticket ticket)
+        public async Task<ActionResult<Ticket>> PostTicket(CreateTicketVM ticketVM)
         {
             ClaimsPrincipal loggedUser = HttpContext.User;
             string userName = loggedUser.FindFirst(ClaimTypes.Name).ToString();
             User user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
-
-            ticket.CreatedBy = user;
-            ticket.CreatedDate = DateTime.Now;
-            ticket.LastChangedBy = user;
-            ticket.LastChangedDate = DateTime.Now;
-            ticket.TicketClosed = false;
+            
+            Document document = _context.Documents.Find(ticketVM.DocumentId);
+            Ticket ticket = new Ticket
+            {
+                CreatedBy = user,
+                CreatedDate = DateTime.Now,
+                Description = ticketVM.Description,
+                Document = document,
+                LastChangedBy = user,
+                LastChangedDate = DateTime.Now,
+                TicketClosed = false,
+                Title = ticketVM.Title
+            };
 
             _context.Tickets.Add(ticket);
             await _context.SaveChangesAsync();
