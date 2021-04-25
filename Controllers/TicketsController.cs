@@ -29,9 +29,9 @@ namespace ticketsystem_backend.Controllers
         public async Task<ActionResult<IEnumerable<Ticket>>> GetTicket()
         {
             return await _context.Tickets
-                .Include(t => t.Document.Module.Responsible.Role)
-                .Include(t => t.CreatedBy.Role)
-                .Include(t => t.LastChangedBy.Role)
+                .Include(t => t.Document.Module.Responsible)
+                .Include(t => t.CreatedBy)
+                .Include(t => t.LastChangedBy)
                 .ToListAsync();
         }
 
@@ -41,8 +41,9 @@ namespace ticketsystem_backend.Controllers
         {
             IEnumerable<Document> documents = _context.Documents.Where(d => d.Module.Id == id);
             return await _context.Tickets.Where(t => documents.Contains(t.Document))
-                .Include(t => t.Document)
+                .Include(t => t.Document.Module.Responsible)
                 .Include(t => t.CreatedBy)
+                .Include(t => t.LastChangedBy)
                 .ToListAsync();
         }
 
@@ -51,13 +52,15 @@ namespace ticketsystem_backend.Controllers
         public async Task<ActionResult<IEnumerable<Ticket>>> GetTutorTicket()
         {
             ClaimsPrincipal loggedUser = HttpContext.User;
-            string userName = loggedUser.FindFirst(ClaimTypes.Name).ToString();
+            string userName = loggedUser.FindFirst(ClaimTypes.Name).Value;
             User user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
+
             IEnumerable<Module> modules = _context.Modules.Where(m => m.Responsible == user);
             IEnumerable<Document> documents = _context.Documents.Where(d => modules.Contains(d.Module));
             return await _context.Tickets.Where(t => documents.Contains(t.Document))
-                .Include(t => t.Document)
+                .Include(t => t.Document.Module.Responsible)
                 .Include(t => t.CreatedBy)
+                .Include(t => t.LastChangedBy)
                 .ToListAsync();
         }
 
@@ -66,15 +69,16 @@ namespace ticketsystem_backend.Controllers
         public async Task<ActionResult<IEnumerable<Ticket>>> GetUserTicket()
         {
             ClaimsPrincipal loggedUser = HttpContext.User;
-            string userName = loggedUser.FindFirst(ClaimTypes.Name).ToString();
+            string userName = loggedUser.FindFirst(ClaimTypes.Name).Value;
             User user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
             return await _context.Tickets.Where(t => t.CreatedBy == user)
-                .Include(t => t.Document)
+                .Include(t => t.Document.Module.Responsible)
                 .Include(t => t.CreatedBy)
+                .Include(t => t.LastChangedBy)
                 .ToListAsync();
         }
 
-        
+
         // GET: api/Tickets/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TicketVM>> GetTicket(int id)
@@ -105,37 +109,37 @@ namespace ticketsystem_backend.Controllers
             return ticketVM;
         }
 
-        // PUT: api/Tickets/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        [Authorize(Roles = "Tutor")]
-        public async Task<IActionResult> PutTicket(int id, Ticket ticket)
-        {
-            if (id != ticket.Id)
-            {
-                return BadRequest();
-            }
+        //// PUT: api/Tickets/5
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPut("{id}")]
+        //[Authorize(Roles = "Tutor")]
+        //public async Task<IActionResult> PutTicket(int id, Ticket ticket)
+        //{
+        //    if (id != ticket.Id)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            _context.Entry(ticket).State = EntityState.Modified;
+        //    _context.Entry(ticket).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TicketExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!TicketExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         // POST: api/Tickets
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -143,9 +147,9 @@ namespace ticketsystem_backend.Controllers
         public async Task<ActionResult<Ticket>> PostTicket(CreateTicketVM ticketVM)
         {
             ClaimsPrincipal loggedUser = HttpContext.User;
-            string userName = loggedUser.FindFirst(ClaimTypes.Name).ToString();
+            string userName = loggedUser.FindFirst(ClaimTypes.Name).Value;
             User user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
-            
+
             Document document = _context.Documents.Find(ticketVM.DocumentId);
             Ticket ticket = new Ticket
             {
@@ -171,7 +175,7 @@ namespace ticketsystem_backend.Controllers
         public async Task<ActionResult<IEnumerable<Ticket>>> ChangeTicketStatus(int id)
         {
             ClaimsPrincipal loggedUser = HttpContext.User;
-            string userName = loggedUser.FindFirst(ClaimTypes.Name).ToString();
+            string userName = loggedUser.FindFirst(ClaimTypes.Name).Value;
             User user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
 
             Ticket ticket = _context.Tickets.Find(id);
@@ -189,24 +193,24 @@ namespace ticketsystem_backend.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-               
+
         }
 
-        // DELETE: api/Tickets/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTicket(int id)
-        {
-            var ticket = await _context.Tickets.FindAsync(id);
-            if (ticket == null)
-            {
-                return NotFound();
-            }
+        //// DELETE: api/Tickets/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteTicket(int id)
+        //{
+        //    var ticket = await _context.Tickets.FindAsync(id);
+        //    if (ticket == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            _context.Tickets.Remove(ticket);
-            await _context.SaveChangesAsync();
+        //    _context.Tickets.Remove(ticket);
+        //    await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         private bool TicketExists(int id)
         {

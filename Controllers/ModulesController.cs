@@ -13,7 +13,6 @@ namespace ticketsystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
     public class ModulesController : ControllerBase
     {
         private readonly TicketSystemDbContext _context;
@@ -28,7 +27,7 @@ namespace ticketsystem_backend.Controllers
         public async Task<ActionResult<IEnumerable<Module>>> GetModules()
         {
             return await _context.Modules
-                .Include(m => m.Responsible.Role)
+                .Include(m => m.Responsible)
                 .ToListAsync();
         }
 
@@ -36,7 +35,9 @@ namespace ticketsystem_backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Module>> GetModule(int id)
         {
-            var @module = await _context.Modules.FindAsync(id);
+            var @module = await _context.Modules.Where(m => m.Id == id)
+                .Include(m => m.Responsible)
+                .FirstOrDefaultAsync();
 
             if (@module == null)
             {
@@ -80,12 +81,20 @@ namespace ticketsystem_backend.Controllers
         // POST: api/Modules
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Module>> PostModule(Module @module)
+        public async Task<ActionResult<Module>> PostModule(CreateModuleVM moduleVM)
         {
-            _context.Modules.Add(@module);
+            User responsible = _context.Users.Where(u => u.Id == moduleVM.ResponsibleUserId).FirstOrDefault();
+
+            Module module = new Module
+            {
+                Name = moduleVM.Name,
+                Responsible = responsible
+            };
+
+            _context.Modules.Add(module);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetModule", new { id = @module.Id }, @module);
+            return CreatedAtAction("GetModule", new { id = module.Id }, module);
         }
 
         //// DELETE: api/Modules/5

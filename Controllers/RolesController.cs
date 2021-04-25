@@ -13,7 +13,6 @@ namespace ticketsystem_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
     public class RolesController : ControllerBase
     {
         private readonly TicketSystemDbContext _context;

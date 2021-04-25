@@ -29,10 +29,10 @@ namespace ticketsystem_backend.Controllers
         public async Task<ActionResult<IEnumerable<Comment>>> GetComments()
         {
             return await _context.Comments
-                .Include(c => c.CreatedBy.Role)
-                .Include(c => c.Ticket.Document.Module.Responsible.Role)
-                .Include(c => c.Ticket.CreatedBy.Role)
-                .Include(c => c.Ticket.LastChangedBy.Role)
+                .Include(c => c.CreatedBy)
+                .Include(c => c.Ticket.Document.Module.Responsible)
+                .Include(c => c.Ticket.CreatedBy)
+                .Include(c => c.Ticket.LastChangedBy)
                 .ToListAsync();
         }
 
@@ -40,7 +40,11 @@ namespace ticketsystem_backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Comment>> GetComment(int id)
         {
-            var comment = await _context.Comments.FindAsync(id);
+            var comment = await _context.Comments.Where(c => c.Id == id)
+                .Include(c => c.CreatedBy)
+                .Include(c => c.Ticket.Document.Module.Responsible)
+                .Include(c => c.Ticket.CreatedBy)
+                .Include(c => c.Ticket.LastChangedBy).FirstOrDefaultAsync();
 
             if (comment == null)
             {
@@ -84,15 +88,22 @@ namespace ticketsystem_backend.Controllers
         // POST: api/Comments
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Comment>> PostComment(Comment comment)
+        public async Task<ActionResult<Comment>> PostComment(CreateCommentVM commentVM)
         {
             ClaimsPrincipal loggedUser = HttpContext.User;
-            string userName = loggedUser.FindFirst(ClaimTypes.Name).ToString();
+            string userName = loggedUser.FindFirst(ClaimTypes.Name).Value;
             User user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
 
-            comment.CreatedBy = user;
-            comment.CreatedDate = DateTime.Now;
-            
+            Ticket ticket = _context.Tickets.Where(t => t.Id == commentVM.TicketID).FirstOrDefault();
+
+            Comment comment = new Comment
+            {
+                CreatedBy = user,
+                CreatedDate = DateTime.Now,
+                Text = commentVM.Text,
+                Ticket = ticket
+            };
+
             _context.Comments.Add(comment);
             await _context.SaveChangesAsync();
 

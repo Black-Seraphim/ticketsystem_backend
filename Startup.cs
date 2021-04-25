@@ -32,17 +32,25 @@ namespace ticketsystem_backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddCors();
+
+            services.AddControllers();
+
             services.AddCors(options =>
             {
                 options.AddPolicy("EnableCORS", builder =>
                 {
-                    builder.AllowAnyOrigin()
+                    builder
+                    //.WithOrigins("https://epic-northcutt-0cee3d.netlify.app", "http://localhost:3000")
+                    .AllowAnyOrigin()
+                    //.SetIsOriginAllowed(origin => true)
+                    //.AllowCredentials()
                     .AllowAnyHeader()
                     .AllowAnyMethod();
                 });
             });
 
-            services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ticketsystem_backend", Version = "v1" });
@@ -71,6 +79,7 @@ namespace ticketsystem_backend
                     IssuerSigningKey = new SymmetricSecurityKey(Base64UrlEncoder.DecodeBytes("MBcCT4UEs67vh3shK683Lxhn33t2LTtH"))
                 };
             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -85,9 +94,16 @@ namespace ticketsystem_backend
 
             app.UseHttpsRedirection();
 
+            app.UseRouting();
+
             app.UseCors("EnableCORS");
 
-            app.UseRouting();
+            //app.UseCors(x => x
+            //    .AllowAnyMethod()
+            //    .AllowAnyHeader()
+            //    .SetIsOriginAllowed(origin => true)
+            //    .AllowCredentials());
+
 
             app.UseAuthentication();
             app.UseAuthorization();
