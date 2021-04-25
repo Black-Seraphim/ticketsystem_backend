@@ -32,4 +32,11 @@ namespace ticketsystem_backend.Models
         public DateTime LastChangedDate { get; set; }
         public List<Comment> Comments { get; set; }
     }
+
+    public class CreateTicketVM
+    {
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public int DocumentId { get; set; }
+    }
 }
