@@ -22,6 +22,10 @@ namespace ticketsystem_backend.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Returns list of all Roles
+        /// </summary>
+        /// <returns></returns>
         // GET: api/Roles
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Role>>> GetRoles()
@@ -29,6 +33,11 @@ namespace ticketsystem_backend.Controllers
             return await _context.Roles.ToListAsync();
         }
 
+        /// <summary>
+        /// Returns a role according to the send RoleId
+        /// </summary>
+        /// <param name="id">RoleId</param>
+        /// <returns></returns>
         // GET: api/Roles/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Role>> GetRole(int id)
@@ -74,14 +83,21 @@ namespace ticketsystem_backend.Controllers
         //    return NoContent();
         //}
 
+        /// <summary>
+        /// Create new Role
+        /// </summary>
+        /// <param name="role">Role-Model including Name</param>
+        /// <returns></returns>
         // POST: api/Roles
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Role>> PostRole(Role role)
         {
+            // Add new Role to Database
             _context.Roles.Add(role);
             await _context.SaveChangesAsync();
 
+            // Return new Role
             return CreatedAtAction("GetRole", new { id = role.Id }, role);
         }
 
@@ -101,6 +117,11 @@ namespace ticketsystem_backend.Controllers
         //    return NoContent();
         //}
 
+        /// <summary>
+        /// Returns true if Role exist
+        /// </summary>
+        /// <param name="id">RoleId</param>
+        /// <returns></returns>
         private bool RoleExists(int id)
         {
             return _context.Roles.Any(e => e.Id == id);

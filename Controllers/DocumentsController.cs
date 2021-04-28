@@ -22,6 +22,10 @@ namespace ticketsystem_backend.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// returns a list of all Documents
+        /// </summary>
+        /// <returns></returns>
         // GET: api/Documents
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Document>>> GetDocuments()
@@ -31,6 +35,11 @@ namespace ticketsystem_backend.Controllers
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// Returns the document according to the send Id
+        /// </summary>
+        /// <param name="id">DocumentId</param>
+        /// <returns></returns>
         // GET: api/Documents/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Document>> GetDocument(int id)
@@ -45,6 +54,20 @@ namespace ticketsystem_backend.Controllers
             }
 
             return document;
+        }
+
+        /// <summary>
+        /// Returns all Documents that are related to the send course Number
+        /// </summary>
+        /// <param name="id">ModuleId</param>
+        /// <returns></returns>
+        // GET: api/CourseTickets/GetByCourseId/5
+        [HttpGet("GetByModuleId/{id}")]
+        public async Task<ActionResult<IEnumerable<Document>>> GetModuleDocuments(int id)
+        {
+            return await _context.Documents.Where(d => d.Module.Id == id)
+                .Include(d => d.Module.Responsible)
+                .ToListAsync();
         }
 
         //// PUT: api/Documents/5
@@ -78,13 +101,20 @@ namespace ticketsystem_backend.Controllers
         //    return NoContent();
         //}
 
+        /// <summary>
+        /// Create a new Document and returns it
+        /// </summary>
+        /// <param name="documentVM">Document-Model including Name, Link and ModuleId</param>
+        /// <returns></returns>
         // POST: api/Documents
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Document>> PostDocument(CreateDocumentVM documentVM)
         {
+            // Get related Module
             Module module = _context.Modules.Where(m => m.Id == documentVM.ModuleId).FirstOrDefault();
 
+            // Create new Document
             Document document = new Document
             {
                 Link = documentVM.Link,
@@ -92,9 +122,11 @@ namespace ticketsystem_backend.Controllers
                 Name = documentVM.Name
             };
 
+            // Add Document to Database
             _context.Documents.Add(document);
             await _context.SaveChangesAsync();
 
+            // Return new Document
             return CreatedAtAction("GetDocument", new { id = document.Id }, document);
         }
 
@@ -114,6 +146,11 @@ namespace ticketsystem_backend.Controllers
         //    return NoContent();
         //}
 
+        /// <summary>
+        /// Returns true if Document exist
+        /// </summary>
+        /// <param name="id">DocumentId</param>
+        /// <returns></returns>
         private bool DocumentExists(int id)
         {
             return _context.Documents.Any(e => e.Id == id);

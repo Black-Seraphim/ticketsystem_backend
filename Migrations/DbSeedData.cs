@@ -18,8 +18,10 @@ namespace ticketsystem_backend.Migrations
 
         public void EnsureSeedData()
         {
+            // Ensure database is created
             _context.Database.EnsureCreated();
 
+            // Seed roles if no role exist
             if (!_context.Roles.Any())
             {
                 _context.Roles.Add(new Role() { Name = "Student" });
@@ -27,6 +29,7 @@ namespace ticketsystem_backend.Migrations
                 _context.SaveChanges();
             }
 
+            // Seed users if no user exist
             if (!_context.Users.Any())
             {
                 _context.Users.Add(new User()
@@ -67,6 +70,7 @@ namespace ticketsystem_backend.Migrations
                 _context.SaveChanges();
             }
 
+            // Seed modules if no module exist
             if (!_context.Modules.Any())
             {
                 _context.Modules.Add(new Module()
@@ -102,6 +106,7 @@ namespace ticketsystem_backend.Migrations
                 _context.SaveChanges();
             }
 
+            // Seed documents if no document exist
             if (!_context.Documents.Any())
             {
                 _context.Documents.Add(new Document()
@@ -142,6 +147,7 @@ namespace ticketsystem_backend.Migrations
 
             }
 
+            // Seed tickets if no ticket exist
             if (!_context.Tickets.Any())
             {
                 _context.Tickets.Add(new Ticket()
@@ -189,6 +195,7 @@ namespace ticketsystem_backend.Migrations
                 _context.SaveChanges();
             }
 
+            // Seed comments if no comment exist
             if (!_context.Comments.Any())
             {
                 _context.Comments.Add(new Comment()

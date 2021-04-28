@@ -14,6 +14,7 @@ namespace ticketsystem_backend.Models
 
     }
 
+    // User-Model for API
     public class CreateUserVM
     {
         public string UserName { get; set; }

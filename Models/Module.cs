@@ -12,6 +12,7 @@ namespace ticketsystem_backend.Models
         public User Responsible { get; set; }
     }
 
+    // Module-Model for API
     public class CreateModuleVM
     {
         public string Name { get; set; }

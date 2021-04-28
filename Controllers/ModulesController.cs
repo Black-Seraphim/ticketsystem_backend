@@ -22,6 +22,10 @@ namespace ticketsystem_backend.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// returns a list of all Modules
+        /// </summary>
+        /// <returns></returns>
         // GET: api/Modules
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Module>>> GetModules()
@@ -31,6 +35,11 @@ namespace ticketsystem_backend.Controllers
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// Returns a Module according to the send ModuleId
+        /// </summary>
+        /// <param name="id">ModuleId</param>
+        /// <returns></returns>
         // GET: api/Modules/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Module>> GetModule(int id)
@@ -78,22 +87,31 @@ namespace ticketsystem_backend.Controllers
         //    return NoContent();
         //}
 
+        /// <summary>
+        /// Creates a new Course/Module
+        /// </summary>
+        /// <param name="moduleVM">Module-Model including Name and ResponsibleUserId</param>
+        /// <returns></returns>
         // POST: api/Modules
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Module>> PostModule(CreateModuleVM moduleVM)
         {
+            // Get ResponsibleUser
             User responsible = _context.Users.Where(u => u.Id == moduleVM.ResponsibleUserId).FirstOrDefault();
 
+            // Create new Module
             Module module = new Module
             {
                 Name = moduleVM.Name,
                 Responsible = responsible
             };
 
+            // Add Module to Database
             _context.Modules.Add(module);
             await _context.SaveChangesAsync();
 
+            // Return new Module
             return CreatedAtAction("GetModule", new { id = module.Id }, module);
         }
 
@@ -113,6 +131,11 @@ namespace ticketsystem_backend.Controllers
         //    return NoContent();
         //}
 
+        /// <summary>
+        /// Returns true if Module exist
+        /// </summary>
+        /// <param name="id">ModuleId</param>
+        /// <returns></returns>
         private bool ModuleExists(int id)
         {
             return _context.Modules.Any(e => e.Id == id);

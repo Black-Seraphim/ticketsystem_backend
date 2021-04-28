@@ -17,11 +17,14 @@ using ticketsystem_backend.Migrations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 
 namespace ticketsystem_backend
 {
     public class Startup
     {
+        readonly string MySpecificOrigin = "EnableCORS";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -38,15 +41,19 @@ namespace ticketsystem_backend
 
             services.AddCors(options =>
             {
-                options.AddPolicy("EnableCORS", builder =>
+                options.AddPolicy(name: MySpecificOrigin, builder =>
                 {
                     builder
+                    //.WithOrigins("https://epic-northcutt-0cee3d.netlify.app", "https://www.hetfeld.name", "http://localhost")
                     //.WithOrigins("https://epic-northcutt-0cee3d.netlify.app", "http://localhost:3000")
                     .AllowAnyOrigin()
                     //.SetIsOriginAllowed(origin => true)
+                    //.WithHeaders("Content-Type", "application/json")
+                    //.WithMethods("PUT", "DELETE", "GET", "POST", "OPTIONS")
                     //.AllowCredentials()
                     .AllowAnyHeader()
-                    .AllowAnyMethod();
+                    .AllowAnyMethod()
+                    ;
                 });
             });
 
@@ -74,8 +81,10 @@ namespace ticketsystem_backend
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     
+                    //ValidIssuer = "https://epic-northcutt-0cee3d.netlify.app",
                     ValidIssuer = "*",
                     ValidAudience = "*",
+                    //ValidAudience = "https://epic-northcutt-0cee3d.netlify.app",
                     IssuerSigningKey = new SymmetricSecurityKey(Base64UrlEncoder.DecodeBytes("MBcCT4UEs67vh3shK683Lxhn33t2LTtH"))
                 };
             });
@@ -96,7 +105,7 @@ namespace ticketsystem_backend
 
             app.UseRouting();
 
-            app.UseCors("EnableCORS");
+            app.UseCors(MySpecificOrigin);
 
             //app.UseCors(x => x
             //    .AllowAnyMethod()
@@ -111,6 +120,21 @@ namespace ticketsystem_backend
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+
+
+
+                //endpoints.MapGet("/echo",
+                //context => context.Response.WriteAsync("echo"))
+                //.RequireCors(MySpecificOrigin);
+
+                //endpoints.MapControllers()
+                //         .RequireCors(MySpecificOrigin);
+
+                //endpoints.MapGet("/echo2",
+                //    context => context.Response.WriteAsync("echo2"));
+
+                //endpoints.MapRazorPages();
             });
             seeder.EnsureSeedData();
         }
