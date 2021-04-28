@@ -24,23 +24,58 @@ namespace ticketsystem_backend.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Returns a list of all existing comments included the Creator and related Tickets
+        /// </summary>
+        /// <returns></returns>
         // GET: api/Comments
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Comment>>> GetComments()
         {
             return await _context.Comments
-                .Include(c => c.CreatedBy.Role)
-                .Include(c => c.Ticket.Document.Module.Responsible.Role)
-                .Include(c => c.Ticket.CreatedBy.Role)
-                .Include(c => c.Ticket.LastChangedBy.Role)
+                .Include(c => c.CreatedBy)
+                .Include(c => c.Ticket.Document.Module.Responsible)
+                .Include(c => c.Ticket.CreatedBy)
+                .Include(c => c.Ticket.LastChangedBy)
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// Returns all Documents that are related to the send course Number
+        /// </summary>
+        /// <param name="id">ModuleId</param>
+        /// <returns></returns>
+        // GET: api/Comments/GetByTicketId/5
+        [HttpGet("GetByTicketId/{id}")]
+        public async Task<ActionResult<IEnumerable<Comment>>> GetTicketComments(int id)
+        {
+            // Get ticket
+            Ticket ticket = _context.Tickets.Where(t => t.Id == id).FirstOrDefault();
+
+            // Return all comments related to the ticket
+            return await _context.Comments.Where(c => c.Ticket == ticket)
+                .Include(c => c.CreatedBy)
+                .Include(c => c.Ticket.Document.Module.Responsible)
+                .Include(c => c.Ticket.CreatedBy)
+                .Include(c => c.Ticket.LastChangedBy)
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Returns a Comment matching the send id.
+        /// Included the Creator and related Tickets
+        /// </summary>
+        /// <param name="id">id of the Comment that should be returned</param>
+        /// <returns></returns>
         // GET: api/Comments/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Comment>> GetComment(int id)
         {
-            var comment = await _context.Comments.FindAsync(id);
+            var comment = await _context.Comments.Where(c => c.Id == id)
+                .Include(c => c.CreatedBy)
+                .Include(c => c.Ticket.Document.Module.Responsible)
+                .Include(c => c.Ticket.CreatedBy)
+                .Include(c => c.Ticket.LastChangedBy).FirstOrDefaultAsync();
 
             if (comment == null)
             {
@@ -81,21 +116,38 @@ namespace ticketsystem_backend.Controllers
         //    return NoContent();
         //}
 
+        /// <summary>
+        /// Creates a new Comment. Returns the created comment
+        /// </summary>
+        /// <param name="commentVM">Model including TicketId and Text</param>
+        /// <returns></returns>
         // POST: api/Comments
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Comment>> PostComment(Comment comment)
+        public async Task<ActionResult<Comment>> PostComment(CreateCommentVM commentVM)
         {
+            // Get registered user
             ClaimsPrincipal loggedUser = HttpContext.User;
-            string userName = loggedUser.FindFirst(ClaimTypes.Name).ToString();
+            string userName = loggedUser.FindFirst(ClaimTypes.Name).Value;
             User user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
 
-            comment.CreatedBy = user;
-            comment.CreatedDate = DateTime.Now;
-            
+            // Get related ticket
+            Ticket ticket = _context.Tickets.Where(t => t.Id == commentVM.TicketID).FirstOrDefault();
+
+            // Create new comment
+            Comment comment = new Comment
+            {
+                CreatedBy = user,
+                CreatedDate = DateTime.Now,
+                Text = commentVM.Text,
+                Ticket = ticket
+            };
+
+            // Add Comment to Database
             _context.Comments.Add(comment);
             await _context.SaveChangesAsync();
 
+            // return created Comment
             return CreatedAtAction("GetComment", new { id = comment.Id }, comment);
         }
 
@@ -115,6 +167,11 @@ namespace ticketsystem_backend.Controllers
         //    return NoContent();
         //}
 
+        /// <summary>
+        /// Returns true if comment with send ID exist
+        /// </summary>
+        /// <param name="id">CommentId</param>
+        /// <returns></returns>
         private bool CommentExists(int id)
         {
             return _context.Comments.Any(e => e.Id == id);

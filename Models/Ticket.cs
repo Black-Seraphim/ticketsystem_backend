@@ -18,7 +18,7 @@ namespace ticketsystem_backend.Models
         public DateTime LastChangedDate { get; set; }
     }
 
-
+    // Ticket-Model for API, that includes a list of comments
     public class TicketVM
     {
         public int Id { get; set; }
@@ -33,6 +33,7 @@ namespace ticketsystem_backend.Models
         public List<Comment> Comments { get; set; }
     }
 
+    // Ticket-Model for API
     public class CreateTicketVM
     {
         public string Title { get; set; }
