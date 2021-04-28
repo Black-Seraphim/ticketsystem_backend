@@ -61,7 +61,7 @@ namespace ticketsystem_backend.Controllers
         /// </summary>
         /// <param name="id">ModuleId</param>
         /// <returns></returns>
-        // GET: api/CourseTickets/GetByCourseId/5
+        // GET: api/Documents/GetByModuleId/5
         [HttpGet("GetByModuleId/{id}")]
         public async Task<ActionResult<IEnumerable<Document>>> GetModuleDocuments(int id)
         {

@@ -41,6 +41,27 @@ namespace ticketsystem_backend.Controllers
         }
 
         /// <summary>
+        /// Returns all Documents that are related to the send course Number
+        /// </summary>
+        /// <param name="id">ModuleId</param>
+        /// <returns></returns>
+        // GET: api/Comments/GetByTicketId/5
+        [HttpGet("GetByTicketId/{id}")]
+        public async Task<ActionResult<IEnumerable<Comment>>> GetTicketComments(int id)
+        {
+            // Get ticket
+            Ticket ticket = _context.Tickets.Where(t => t.Id == id).FirstOrDefault();
+
+            // Return all comments related to the ticket
+            return await _context.Comments.Where(c => c.Ticket == ticket)
+                .Include(c => c.CreatedBy)
+                .Include(c => c.Ticket.Document.Module.Responsible)
+                .Include(c => c.Ticket.CreatedBy)
+                .Include(c => c.Ticket.LastChangedBy)
+                .ToListAsync();
+        }
+
+        /// <summary>
         /// Returns a Comment matching the send id.
         /// Included the Creator and related Tickets
         /// </summary>
