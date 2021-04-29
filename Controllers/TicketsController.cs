@@ -54,6 +54,18 @@ namespace ticketsystem_backend.Controllers
         }
 
         /// <summary>
+        /// Returns a list of tickets that contains the search string
+        /// </summary>
+        /// <param name="id">searchString</param>
+        /// <returns></returns>
+        // GET: api/Ticktes/SearchByTitle/searchstring
+        [HttpGet("SearchByTitle/{searchString}")]
+        public async Task<ActionResult<IEnumerable<Ticket>>> SearchByTitle(string searchString)
+        {
+            return await _context.Tickets.Where(t => t.Title.Contains(searchString)).ToListAsync();
+        }
+
+        /// <summary>
         /// Returns a list of all tickets assigned to the tutor that is logged in
         /// </summary>
         /// <returns></returns>
