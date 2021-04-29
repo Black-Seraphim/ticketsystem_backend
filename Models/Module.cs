@@ -11,4 +11,11 @@ namespace ticketsystem_backend.Models
         public string Name { get; set; }
         public User Responsible { get; set; }
     }
+
+    // Module-Model for API
+    public class CreateModuleVM
+    {
+        public string Name { get; set; }
+        public int ResponsibleUserId { get; set; }
+    }
 }

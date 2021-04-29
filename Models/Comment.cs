@@ -13,4 +13,11 @@ namespace ticketsystem_backend.Models
         public User CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
     }
+
+    // Comment-Model for API
+    public class CreateCommentVM
+    {
+        public int TicketID { get; set; }
+        public string Text { get; set; }
+    }
 }

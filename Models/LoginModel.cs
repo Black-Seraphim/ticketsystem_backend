@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace ticketsystem_backend.Models
 {
+    // Login-Model for API
     public class LoginModel
     {
         public string UserName { get; set; }
