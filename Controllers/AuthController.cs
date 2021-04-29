@@ -49,7 +49,7 @@ namespace ticketsystem_backend.Controllers
                     issuer: "*",
                     audience: "*",
                     claims: claims,
-                    expires: DateTime.Now.AddMinutes(60),
+                    expires: DateTime.Now.AddMinutes(61), // increased from 60 to 61 according to michaels request ;-)
                     signingCredentials: signingCredentials                    
                     );
 
