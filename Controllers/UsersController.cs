@@ -27,24 +27,26 @@ namespace ticketsystem_backend.Controllers
         /// <returns></returns>
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<GetUserVM>>> GetUsers()
         {
-            return await _context.Users
-                .Include(u => u.Role)
-                .ToListAsync();
+            return await _context.Users.Select(u => new GetUserVM
+            {
+                Id = u.Id,
+                Role = u.Role,
+                UserName = u.UserName
+            }).ToListAsync();
         }
 
         /// <summary>
-        /// Returns a user according to the send UserId
+        /// Returns a user according to the send userId
         /// </summary>
-        /// <param name="id">UserId</param>
+        /// <param name="id">userId</param>
         /// <returns></returns>
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<GetUserVM>> GetUser(int id)
         {
             var user = await _context.Users.Where(u => u.Id == id)
-                .Include(u => u.Role)
                 .FirstOrDefaultAsync();
 
             if (user == null)
@@ -52,7 +54,12 @@ namespace ticketsystem_backend.Controllers
                 return NotFound();
             }
 
-            return user;
+            return new GetUserVM
+            {
+                Id = user.Id,
+                Role = user.Role,
+                UserName = user.UserName
+            };
         }
 
         //// PUT: api/Users/5
@@ -96,10 +103,10 @@ namespace ticketsystem_backend.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(CreateUserVM userVM)
         {
-            // Get role
+            // get role
             Role role = _context.Roles.Where(r => r.Id == userVM.RoleId).FirstOrDefault();
 
-            // Create new user
+            // create new user
             User user = new User
             {
                 Password = userVM.Password,
@@ -107,11 +114,11 @@ namespace ticketsystem_backend.Controllers
                 UserName = userVM.UserName
             };
 
-            // Add user to database
+            // add user to database
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            // Return user
+            // return user
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 

@@ -22,4 +22,11 @@ namespace ticketsystem_backend.Models
         public int RoleId { get; set; }
     }
 
+    // User-Model for API (GET)
+    public class GetUserVM
+    {
+        public int Id { get; set; }
+        public string UserName { get; set; }
+        public Role Role { get; set; }
+    }
 }

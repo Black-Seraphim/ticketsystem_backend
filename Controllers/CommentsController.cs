@@ -25,7 +25,7 @@ namespace ticketsystem_backend.Controllers
         }
 
         /// <summary>
-        /// Returns a list of all existing comments included the Creator and related Tickets
+        /// Returns a list of all existing comments
         /// </summary>
         /// <returns></returns>
         // GET: api/Comments
@@ -33,15 +33,11 @@ namespace ticketsystem_backend.Controllers
         public async Task<ActionResult<IEnumerable<Comment>>> GetComments()
         {
             return await _context.Comments
-                .Include(c => c.CreatedBy)
-                .Include(c => c.Ticket.Document.Module.Responsible)
-                .Include(c => c.Ticket.CreatedBy)
-                .Include(c => c.Ticket.LastChangedBy)
                 .ToListAsync();
         }
 
         /// <summary>
-        /// Returns all Documents that are related to the send course Number
+        /// Returns all documents that are related to the send course number
         /// </summary>
         /// <param name="id">ModuleId</param>
         /// <returns></returns>
@@ -49,33 +45,25 @@ namespace ticketsystem_backend.Controllers
         [HttpGet("GetByTicketId/{id}")]
         public async Task<ActionResult<IEnumerable<Comment>>> GetTicketComments(int id)
         {
-            // Get ticket
+            // get ticket
             Ticket ticket = _context.Tickets.Where(t => t.Id == id).FirstOrDefault();
 
-            // Return all comments related to the ticket
+            // return all comments related to the ticket
             return await _context.Comments.Where(c => c.Ticket == ticket)
-                .Include(c => c.CreatedBy)
-                .Include(c => c.Ticket.Document.Module.Responsible)
-                .Include(c => c.Ticket.CreatedBy)
-                .Include(c => c.Ticket.LastChangedBy)
                 .ToListAsync();
         }
 
         /// <summary>
-        /// Returns a Comment matching the send id.
-        /// Included the Creator and related Tickets
+        /// Returns a comment matching the send id.
         /// </summary>
-        /// <param name="id">id of the Comment that should be returned</param>
+        /// <param name="id">id of the comment that should be returned</param>
         /// <returns></returns>
         // GET: api/Comments/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Comment>> GetComment(int id)
         {
             var comment = await _context.Comments.Where(c => c.Id == id)
-                .Include(c => c.CreatedBy)
-                .Include(c => c.Ticket.Document.Module.Responsible)
-                .Include(c => c.Ticket.CreatedBy)
-                .Include(c => c.Ticket.LastChangedBy).FirstOrDefaultAsync();
+                .FirstOrDefaultAsync();
 
             if (comment == null)
             {
@@ -126,15 +114,15 @@ namespace ticketsystem_backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Comment>> PostComment(CreateCommentVM commentVM)
         {
-            // Get registered user
+            // get registered user
             ClaimsPrincipal loggedUser = HttpContext.User;
             string userName = loggedUser.FindFirst(ClaimTypes.Name).Value;
             User user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
 
-            // Get related ticket
+            // get related ticket
             Ticket ticket = _context.Tickets.Where(t => t.Id == commentVM.TicketID).FirstOrDefault();
 
-            // Create new comment
+            // create new comment
             Comment comment = new Comment
             {
                 CreatedBy = user,
@@ -143,11 +131,11 @@ namespace ticketsystem_backend.Controllers
                 Ticket = ticket
             };
 
-            // Add Comment to Database
+            // add comment to database
             _context.Comments.Add(comment);
             await _context.SaveChangesAsync();
 
-            // return created Comment
+            // return created comment
             return CreatedAtAction("GetComment", new { id = comment.Id }, comment);
         }
 
