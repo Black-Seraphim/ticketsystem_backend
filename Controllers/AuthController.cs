@@ -29,25 +29,25 @@ namespace ticketsystem_backend.Controllers
         [HttpPost, Route("login")]
         public IActionResult Login([FromBody]LoginModel user)
         {
-            // Check if user exist
+            // check if user exist
             if (user == null)
             {
                 return BadRequest("Invalid client request. Empty user model");
             }
 
-            // Check if user is valid
+            // check if user is valid
             if (string.IsNullOrEmpty(user.UserName) || string.IsNullOrEmpty(user.Password))
             {
                 return BadRequest("Invalid client request. User or Password empty");
             }
 
-            // Create and send Token if user is valid
+            // create and send token if user is valid
             if (UserValidate(user.UserName, user.Password))
             {
                 var secretKey = new SymmetricSecurityKey(Base64UrlEncoder.DecodeBytes("MBcCT4UEs67vh3shK683Lxhn33t2LTtH"));
                 var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
-                // Add UserName and UserRole to claim
+                // add userName and userRole to claim
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.UserName),
@@ -72,7 +72,7 @@ namespace ticketsystem_backend.Controllers
         }
 
         /// <summary>
-        /// Returns the UserRole for send Username
+        /// Returns the userRole for send userName
         /// </summary>
         /// <param name="userName">Username as Email</param>
         /// <returns></returns>
@@ -84,7 +84,7 @@ namespace ticketsystem_backend.Controllers
         }
 
         /// <summary>
-        /// Returns true, if User exist and password matches
+        /// Returns true, if user exist and password matches
         /// </summary>
         /// <param name="userName">Username as Email</param>
         /// <param name="password">User-Password</param>

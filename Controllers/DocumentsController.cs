@@ -23,7 +23,7 @@ namespace ticketsystem_backend.Controllers
         }
 
         /// <summary>
-        /// returns a list of all Documents
+        /// Returns a list of all documents
         /// </summary>
         /// <returns></returns>
         // GET: api/Documents
@@ -31,21 +31,19 @@ namespace ticketsystem_backend.Controllers
         public async Task<ActionResult<IEnumerable<Document>>> GetDocuments()
         {
             return await _context.Documents
-                .Include(d => d.Module.Responsible)
                 .ToListAsync();
         }
 
         /// <summary>
-        /// Returns the document according to the send Id
+        /// Returns the document according to the send id
         /// </summary>
-        /// <param name="id">DocumentId</param>
+        /// <param name="id">documentId</param>
         /// <returns></returns>
         // GET: api/Documents/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Document>> GetDocument(int id)
         {
             var document = await _context.Documents.Where(d => d.Id == id)
-                .Include(d => d.Module.Responsible)
                 .FirstOrDefaultAsync();
 
             if (document == null)
@@ -57,16 +55,15 @@ namespace ticketsystem_backend.Controllers
         }
 
         /// <summary>
-        /// Returns all Documents that are related to the send course Number
+        /// Returns all documents that are related to the send course number
         /// </summary>
-        /// <param name="id">ModuleId</param>
+        /// <param name="id">moduleId</param>
         /// <returns></returns>
         // GET: api/Documents/GetByModuleId/5
         [HttpGet("GetByModuleId/{id}")]
         public async Task<ActionResult<IEnumerable<Document>>> GetModuleDocuments(int id)
         {
             return await _context.Documents.Where(d => d.Module.Id == id)
-                .Include(d => d.Module.Responsible)
                 .ToListAsync();
         }
 
@@ -102,7 +99,7 @@ namespace ticketsystem_backend.Controllers
         //}
 
         /// <summary>
-        /// Create a new Document and returns it
+        /// Create a new document and returns it
         /// </summary>
         /// <param name="documentVM">Document-Model including Name, Link and ModuleId</param>
         /// <returns></returns>
@@ -111,10 +108,10 @@ namespace ticketsystem_backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Document>> PostDocument(CreateDocumentVM documentVM)
         {
-            // Get related Module
+            // get related module
             Module module = _context.Modules.Where(m => m.Id == documentVM.ModuleId).FirstOrDefault();
 
-            // Create new Document
+            // create new document
             Document document = new Document
             {
                 Link = documentVM.Link,
@@ -122,11 +119,11 @@ namespace ticketsystem_backend.Controllers
                 Name = documentVM.Name
             };
 
-            // Add Document to Database
+            // add document to database
             _context.Documents.Add(document);
             await _context.SaveChangesAsync();
 
-            // Return new Document
+            // return new document
             return CreatedAtAction("GetDocument", new { id = document.Id }, document);
         }
 

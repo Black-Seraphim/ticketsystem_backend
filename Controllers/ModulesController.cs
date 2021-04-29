@@ -23,7 +23,7 @@ namespace ticketsystem_backend.Controllers
         }
 
         /// <summary>
-        /// returns a list of all Modules
+        /// Returns a list of all modules
         /// </summary>
         /// <returns></returns>
         // GET: api/Modules
@@ -31,21 +31,19 @@ namespace ticketsystem_backend.Controllers
         public async Task<ActionResult<IEnumerable<Module>>> GetModules()
         {
             return await _context.Modules
-                .Include(m => m.Responsible)
                 .ToListAsync();
         }
 
         /// <summary>
-        /// Returns a Module according to the send ModuleId
+        /// Returns a module according to the send ModuleId
         /// </summary>
-        /// <param name="id">ModuleId</param>
+        /// <param name="id">moduleId</param>
         /// <returns></returns>
         // GET: api/Modules/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Module>> GetModule(int id)
         {
             var @module = await _context.Modules.Where(m => m.Id == id)
-                .Include(m => m.Responsible)
                 .FirstOrDefaultAsync();
 
             if (@module == null)
@@ -88,7 +86,7 @@ namespace ticketsystem_backend.Controllers
         //}
 
         /// <summary>
-        /// Creates a new Course/Module
+        /// Creates a new module
         /// </summary>
         /// <param name="moduleVM">Module-Model including Name and ResponsibleUserId</param>
         /// <returns></returns>
@@ -97,21 +95,21 @@ namespace ticketsystem_backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Module>> PostModule(CreateModuleVM moduleVM)
         {
-            // Get ResponsibleUser
+            // get responsible user
             User responsible = _context.Users.Where(u => u.Id == moduleVM.ResponsibleUserId).FirstOrDefault();
 
-            // Create new Module
+            // create new module
             Module module = new Module
             {
                 Name = moduleVM.Name,
                 Responsible = responsible
             };
 
-            // Add Module to Database
+            // add module to database
             _context.Modules.Add(module);
             await _context.SaveChangesAsync();
 
-            // Return new Module
+            // return new module
             return CreatedAtAction("GetModule", new { id = module.Id }, module);
         }
 

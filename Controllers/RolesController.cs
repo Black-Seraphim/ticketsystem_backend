@@ -23,7 +23,7 @@ namespace ticketsystem_backend.Controllers
         }
 
         /// <summary>
-        /// Returns list of all Roles
+        /// Returns list of all roles
         /// </summary>
         /// <returns></returns>
         // GET: api/Roles
@@ -34,9 +34,9 @@ namespace ticketsystem_backend.Controllers
         }
 
         /// <summary>
-        /// Returns a role according to the send RoleId
+        /// Returns a role according to the send roleId
         /// </summary>
-        /// <param name="id">RoleId</param>
+        /// <param name="id">roleId</param>
         /// <returns></returns>
         // GET: api/Roles/5
         [HttpGet("{id}")]
@@ -84,7 +84,7 @@ namespace ticketsystem_backend.Controllers
         //}
 
         /// <summary>
-        /// Create new Role
+        /// Create new role
         /// </summary>
         /// <param name="role">Role-Model including Name</param>
         /// <returns></returns>
@@ -93,11 +93,11 @@ namespace ticketsystem_backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Role>> PostRole(Role role)
         {
-            // Add new Role to Database
+            // add new role to database
             _context.Roles.Add(role);
             await _context.SaveChangesAsync();
 
-            // Return new Role
+            // return new role
             return CreatedAtAction("GetRole", new { id = role.Id }, role);
         }
 
