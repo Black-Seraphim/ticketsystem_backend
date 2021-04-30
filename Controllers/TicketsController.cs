@@ -125,7 +125,10 @@ namespace ticketsystem_backend.Controllers
         public async Task<ActionResult<TicketVM>> GetTicket(int id)
         {
             // get ticket
-            var ticket = await _context.Tickets.FindAsync(id);
+            Ticket ticket = await _context.Tickets
+                .Where(t => t.Id == id)
+                .Include(t => t.Document.Module.Responsible)
+                .FirstOrDefaultAsync();
 
             // check if ticket exist
             if (ticket == null)
