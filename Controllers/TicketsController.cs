@@ -33,6 +33,8 @@ namespace ticketsystem_backend.Controllers
         public async Task<ActionResult<IEnumerable<Ticket>>> GetTickets()
         {
             return await _context.Tickets
+                .Include(t => t.CreatedBy)
+                .Include(t => t.Document.Module)
                 .ToListAsync();
         }
 
