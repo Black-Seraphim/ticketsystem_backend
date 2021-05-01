@@ -9,7 +9,7 @@ namespace ticketsystem_backend.Migrations
 {
     public class DbSeedData
     {
-        private TicketSystemDbContext _context;
+        private readonly TicketSystemDbContext _context;
 
         public DbSeedData(TicketSystemDbContext context)
         {

@@ -132,7 +132,7 @@ namespace ticketsystem_backend.Controllers
             Ticket ticket = _context.Tickets.Where(t => t.Id == commentVM.TicketID).FirstOrDefault();
 
             // create new comment
-            Comment comment = new Comment
+            Comment comment = new()
             {
                 CreatedBy = user,
                 CreatedDate = DateTime.Now,
@@ -169,9 +169,9 @@ namespace ticketsystem_backend.Controllers
         /// </summary>
         /// <param name="id">CommentId</param>
         /// <returns></returns>
-        private bool CommentExists(int id)
-        {
-            return _context.Comments.Any(e => e.Id == id);
-        }
+        //private bool CommentExists(int id)
+        //{
+        //    return _context.Comments.Any(e => e.Id == id);
+        //}
     }
 }

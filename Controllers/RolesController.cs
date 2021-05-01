@@ -122,9 +122,9 @@ namespace ticketsystem_backend.Controllers
         /// </summary>
         /// <param name="id">RoleId</param>
         /// <returns></returns>
-        private bool RoleExists(int id)
-        {
-            return _context.Roles.Any(e => e.Id == id);
-        }
+        //private bool RoleExists(int id)
+        //{
+        //    return _context.Roles.Any(e => e.Id == id);
+        //}
     }
 }

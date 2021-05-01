@@ -99,7 +99,7 @@ namespace ticketsystem_backend.Controllers
             User responsible = _context.Users.Where(u => u.Id == moduleVM.ResponsibleUserId).FirstOrDefault();
 
             // create new module
-            Module module = new Module
+            Module module = new()
             {
                 Name = moduleVM.Name,
                 Responsible = responsible
@@ -134,9 +134,9 @@ namespace ticketsystem_backend.Controllers
         /// </summary>
         /// <param name="id">ModuleId</param>
         /// <returns></returns>
-        private bool ModuleExists(int id)
-        {
-            return _context.Modules.Any(e => e.Id == id);
-        }
+        //private bool ModuleExists(int id)
+        //{
+        //    return _context.Modules.Any(e => e.Id == id);
+        //}
     }
 }

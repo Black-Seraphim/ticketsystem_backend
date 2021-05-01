@@ -112,7 +112,7 @@ namespace ticketsystem_backend.Controllers
             Module module = _context.Modules.Where(m => m.Id == documentVM.ModuleId).FirstOrDefault();
 
             // create new document
-            Document document = new Document
+            Document document = new()
             {
                 Link = documentVM.Link,
                 Module = module,
@@ -148,9 +148,9 @@ namespace ticketsystem_backend.Controllers
         /// </summary>
         /// <param name="id">DocumentId</param>
         /// <returns></returns>
-        private bool DocumentExists(int id)
-        {
-            return _context.Documents.Any(e => e.Id == id);
-        }
+        //private bool DocumentExists(int id)
+        //{
+        //    return _context.Documents.Any(e => e.Id == id);
+        //}
     }
 }

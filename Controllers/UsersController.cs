@@ -107,7 +107,7 @@ namespace ticketsystem_backend.Controllers
             Role role = _context.Roles.Where(r => r.Id == userVM.RoleId).FirstOrDefault();
 
             // create new user
-            User user = new User
+            User user = new()
             {
                 Password = userVM.Password,
                 Role = role,
@@ -143,9 +143,9 @@ namespace ticketsystem_backend.Controllers
         /// </summary>
         /// <param name="id">UserId</param>
         /// <returns></returns>
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.Id == id);
-        }
+        //private bool UserExists(int id)
+        //{
+        //    return _context.Users.Any(e => e.Id == id);
+        //}
     }
 }

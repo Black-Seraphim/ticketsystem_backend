@@ -55,6 +55,57 @@ namespace ticketsystem_backend.Controllers
                 .ToListAsync();
         }
 
+
+        // GET: api/Ticktes/TicketTimeline
+        [HttpGet("TicketTimeline")]
+        public async Task<ActionResult<IEnumerable<Timeline>>> GetTicketTimeline()
+        {
+            IEnumerable<Ticket> tickets = await _context.Tickets.ToListAsync();
+            List<Timeline> timelines = new List<Timeline>();
+
+            for (int i = 1; i < 13; i++)
+            {
+                DateTime date = new DateTime(1900, i, 1);
+                int openedTickets = tickets.Where(t => t.CreatedDate.Month == i).Count();
+                int closedTickets = tickets.Where(t => t.LastChangedDate.Month == i && t.TicketClosed == true).Count();
+
+                Timeline timeline = new()
+                {
+                    Month = date.ToString("MMMM"),
+                    OpenedTickets = openedTickets,
+                    ClosedTickets = closedTickets
+                };
+                timelines.Add(timeline);
+            }
+                    
+            return timelines;
+        }
+
+        // GET: api/Ticktes/TicketsPerModule
+        [HttpGet("TicketsPerModule")]
+        public async Task<ActionResult<IEnumerable<TicketStat>>> GetTicketsPerModule()
+        {
+            IEnumerable<Module> modules = await _context.Modules.ToListAsync();
+            IEnumerable<Ticket> tickets = await _context.Tickets.ToListAsync();
+            IEnumerable<Document> documents = await _context.Documents.ToListAsync();
+            List<TicketStat> ticketStats = new List<TicketStat>();
+
+            foreach (Module module in modules)
+            {
+                List<Document> moduleDocuments = documents.Where(d => d.Module == module).ToList();
+                List<Ticket> moduleTickes = tickets.Where(t => moduleDocuments.Contains(t.Document)).ToList();
+                TicketStat ticketStat = new()
+                {
+                    ModulName = module.Name,
+                    OpenTickets = moduleTickes.Where(t => t.TicketClosed == true).Count(),
+                    ClosedTickets = moduleTickes.Where(t => t.TicketClosed == false).Count()
+                };
+                ticketStats.Add(ticketStat);
+            }
+
+            return ticketStats;
+        }
+
         /// <summary>
         /// Returns a list of tickets that contains the search string
         /// </summary>
@@ -144,7 +195,7 @@ namespace ticketsystem_backend.Controllers
             List<Comment> comments = _context.Comments.Where(c => c.Ticket.Id == ticket.Id).ToList();
 
             // create a new Ticket-Model that contains a list of related documents
-            TicketVM ticketVM = new TicketVM()
+            TicketVM ticketVM = new()
             {
                 Id = ticket.Id,
                 CreatedBy = ticket.CreatedBy,
@@ -212,7 +263,7 @@ namespace ticketsystem_backend.Controllers
             Document document = _context.Documents.Find(ticketVM.DocumentId);
 
             // create new ticket
-            Ticket ticket = new Ticket
+            Ticket ticket = new()
             {
                 CreatedBy = user,
                 CreatedDate = DateTime.Now,
@@ -291,9 +342,9 @@ namespace ticketsystem_backend.Controllers
         /// </summary>
         /// <param name="id">TicketId</param>
         /// <returns></returns>
-        private bool TicketExists(int id)
-        {
-            return _context.Tickets.Any(e => e.Id == id);
-        }
+        //private bool TicketExists(int id)
+        //{
+        //    return _context.Tickets.Any(e => e.Id == id);
+        //}
     }
 }
