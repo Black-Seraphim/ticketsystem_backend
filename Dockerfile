@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS build-env
 WORKDIR /app
 
 COPY *.csproj ./
-RUN dotnet restore
+RUN dotnet restore -v diag
 
 COPY . ./
 RUN dotnet publish -c Release -o out
