@@ -46,7 +46,11 @@ namespace ticketsystem_backend.Controllers
         public async Task<ActionResult<IEnumerable<Comment>>> GetTicketComments(int id)
         {
             // get ticket
-            Ticket ticket = _context.Tickets.Where(t => t.Id == id).FirstOrDefault();
+            Ticket ticket = _context.Tickets
+                .Where(t => t.Id == id)
+                .Include(t => t.CreatedBy)
+                .Include(t => t.Document.Module)
+                .FirstOrDefault();
 
             // return all comments related to the ticket
             return await _context.Comments.Where(c => c.Ticket == ticket)
