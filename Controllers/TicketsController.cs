@@ -67,6 +67,7 @@ namespace ticketsystem_backend.Controllers
             return await _context.Tickets
                 .Where(t => t.Title.Contains(searchString))
                 .Include(t => t.CreatedBy)
+                .Include(t => t.Document.Module)
                 .ToListAsync();
         }
 
