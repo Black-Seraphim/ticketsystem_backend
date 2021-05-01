@@ -64,7 +64,10 @@ namespace ticketsystem_backend.Controllers
         [HttpGet("SearchByTitle/{searchString}")]
         public async Task<ActionResult<IEnumerable<Ticket>>> SearchByTitle(string searchString)
         {
-            return await _context.Tickets.Where(t => t.Title.Contains(searchString)).ToListAsync();
+            return await _context.Tickets
+                .Where(t => t.Title.Contains(searchString))
+                .Include(t => t.CreatedBy)
+                .ToListAsync();
         }
 
         /// <summary>
