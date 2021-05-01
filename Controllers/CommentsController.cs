@@ -33,6 +33,7 @@ namespace ticketsystem_backend.Controllers
         public async Task<ActionResult<IEnumerable<Comment>>> GetComments()
         {
             return await _context.Comments
+                .Include(c => c.CreatedBy)
                 .ToListAsync();
         }
 
@@ -53,7 +54,9 @@ namespace ticketsystem_backend.Controllers
                 .FirstOrDefault();
 
             // return all comments related to the ticket
-            return await _context.Comments.Where(c => c.Ticket == ticket)
+            return await _context.Comments
+                .Where(c => c.Ticket == ticket)
+                .Include(c => c.CreatedBy)
                 .ToListAsync();
         }
 
@@ -66,7 +69,9 @@ namespace ticketsystem_backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Comment>> GetComment(int id)
         {
-            var comment = await _context.Comments.Where(c => c.Id == id)
+            var comment = await _context.Comments
+                .Where(c => c.Id == id)
+                .Include(c => c.CreatedBy)
                 .FirstOrDefaultAsync();
 
             if (comment == null)
