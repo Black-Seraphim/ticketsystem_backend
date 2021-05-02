@@ -11,7 +11,7 @@ using ticketsystem_backend.Models;
 
 namespace ticketsystem_backend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/modules")]
     [ApiController]
     public class ModulesController : ControllerBase
     {
@@ -54,44 +54,12 @@ namespace ticketsystem_backend.Controllers
             return @module;
         }
 
-        //// PUT: api/Modules/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutModule(int id, Module @module)
-        //{
-        //    if (id != @module.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(@module).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!ModuleExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
         /// <summary>
         /// Creates a new module
         /// </summary>
         /// <param name="moduleVM">Module-Model including Name and ResponsibleUserId</param>
         /// <returns></returns>
         // POST: api/Modules
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Module>> PostModule(CreateModuleVM moduleVM)
         {
@@ -112,31 +80,5 @@ namespace ticketsystem_backend.Controllers
             // return new module
             return CreatedAtAction("GetModule", new { id = module.Id }, module);
         }
-
-        //// DELETE: api/Modules/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteModule(int id)
-        //{
-        //    var @module = await _context.Modules.FindAsync(id);
-        //    if (@module == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.Modules.Remove(@module);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        /// <summary>
-        /// Returns true if Module exist
-        /// </summary>
-        /// <param name="id">ModuleId</param>
-        /// <returns></returns>
-        //private bool ModuleExists(int id)
-        //{
-        //    return _context.Modules.Any(e => e.Id == id);
-        //}
     }
 }

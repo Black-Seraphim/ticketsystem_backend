@@ -11,7 +11,7 @@ using ticketsystem_backend.Models;
 
 namespace ticketsystem_backend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/roles")]
     [ApiController]
     public class RolesController : ControllerBase
     {
@@ -52,44 +52,12 @@ namespace ticketsystem_backend.Controllers
             return role;
         }
 
-        //// PUT: api/Roles/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutRole(int id, Role role)
-        //{
-        //    if (id != role.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(role).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!RoleExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
         /// <summary>
         /// Create new role
         /// </summary>
         /// <param name="role">Role-Model including Name</param>
         /// <returns></returns>
         // POST: api/Roles
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Role>> PostRole(Role role)
         {
@@ -100,31 +68,5 @@ namespace ticketsystem_backend.Controllers
             // return new role
             return CreatedAtAction("GetRole", new { id = role.Id }, role);
         }
-
-        //// DELETE: api/Roles/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteRole(int id)
-        //{
-        //    var role = await _context.Roles.FindAsync(id);
-        //    if (role == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.Roles.Remove(role);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        /// <summary>
-        /// Returns true if Role exist
-        /// </summary>
-        /// <param name="id">RoleId</param>
-        /// <returns></returns>
-        //private bool RoleExists(int id)
-        //{
-        //    return _context.Roles.Any(e => e.Id == id);
-        //}
     }
 }

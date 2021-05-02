@@ -10,8 +10,8 @@ using ticketsystem_backend.Data;
 namespace ticketsystem_backend.Migrations
 {
     [DbContext(typeof(TicketSystemDbContext))]
-    [Migration("20210108200907_CreateTables")]
-    partial class CreateTables
+    [Migration("20210502070119_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -120,6 +120,9 @@ namespace ticketsystem_backend.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("DocumentId")
                         .HasColumnType("int");
 
@@ -131,6 +134,9 @@ namespace ticketsystem_backend.Migrations
 
                     b.Property<bool>("TicketClosed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -150,17 +156,14 @@ namespace ticketsystem_backend.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
+                    b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("RoleId")
                         .HasColumnType("int");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

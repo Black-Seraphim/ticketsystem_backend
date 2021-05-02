@@ -4,7 +4,7 @@
   "parameters": {
     "resourceGroupName": {
       "type": "string",
-      "defaultValue": "ISEF",
+      "defaultValue": "EasyTicket",
       "metadata": {
         "_parameterType": "resourceGroup",
         "description": "Der Name der Ressourcengruppe für die Ressource. Es wird empfohlen, Ressourcen für eine bessere Nachverfolgung in derselben Ressourcengruppe zu platzieren."
@@ -36,7 +36,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "name": "[concat(parameters('resourceGroupName'), 'Deployment', uniqueString(concat('ticketsystem_backend_db', subscription().subscriptionId)))]",
+      "name": "[concat(parameters('resourceGroupName'), 'Deployment', uniqueString(concat('EasyTicketDB', subscription().subscriptionId)))]",
       "resourceGroup": "[parameters('resourceGroupName')]",
       "apiVersion": "2019-10-01",
       "dependsOn": [
@@ -51,23 +51,23 @@
             {
               "kind": "v12.0",
               "location": "[parameters('resourceLocation')]",
-              "name": "iuserver",
+              "name": "easyticketdatabase",
               "type": "Microsoft.Sql/servers",
               "apiVersion": "2017-10-01-preview"
             },
             {
               "sku": {
-                "name": "Standard",
-                "tier": "Standard",
-                "capacity": 10
+                "name": "Basic",
+                "tier": "Basic",
+                "capacity": 5
               },
               "kind": "v12.0,user",
               "location": "[parameters('resourceLocation')]",
-              "name": "iuserver/ticketsystem_backend_db",
+              "name": "easyticketdatabase/EasyTicketDB",
               "type": "Microsoft.Sql/servers/databases",
               "apiVersion": "2017-10-01-preview",
               "dependsOn": [
-                "iuserver"
+                "easyticketdatabase"
               ]
             }
           ]

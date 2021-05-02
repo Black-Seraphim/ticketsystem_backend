@@ -1,13 +1,14 @@
 {
   "dependencies": {
-    "secrets1": {
-      "type": "secrets.user"
+    "apis1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.ApiManagement/service/ticketsystembackendapi/apis/EasyTicketManagementAPI",
+      "type": "apis.azure"
     },
     "mssql1": {
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/easyticketdatabase/databases/EasyTicketDB",
       "type": "mssql.azure",
       "connectionId": "TicketContext",
-      "secretStore": "LocalSecretsFile"
+      "secretStore": "AzureAppSettings"
     }
   }
 }

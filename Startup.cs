@@ -35,8 +35,6 @@ namespace ticketsystem_backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddCors();
-
             services.AddControllers();
 
             services.AddCors(options =>
@@ -44,19 +42,11 @@ namespace ticketsystem_backend
                 options.AddPolicy(name: MySpecificOrigin, builder =>
                 {
                     builder
-                    //.WithOrigins("https://epic-northcutt-0cee3d.netlify.app", "https://www.hetfeld.name", "http://localhost")
-                    //.WithOrigins("https://epic-northcutt-0cee3d.netlify.app", "http://localhost:3000")
-                    .AllowAnyOrigin()
-                    //.SetIsOriginAllowed(origin => true)
-                    //.WithHeaders("Content-Type", "application/json")
-                    //.WithMethods("PUT", "DELETE", "GET", "POST", "OPTIONS")
-                    //.AllowCredentials()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    ;
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
                 });
             });
-
 
             services.AddSwaggerGen(c =>
             {
@@ -80,15 +70,11 @@ namespace ticketsystem_backend
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    
-                    //ValidIssuer = "https://epic-northcutt-0cee3d.netlify.app",
                     ValidIssuer = "*",
                     ValidAudience = "*",
-                    //ValidAudience = "https://epic-northcutt-0cee3d.netlify.app",
                     IssuerSigningKey = new SymmetricSecurityKey(Base64UrlEncoder.DecodeBytes("MBcCT4UEs67vh3shK683Lxhn33t2LTtH"))
                 };
             });
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -107,35 +93,14 @@ namespace ticketsystem_backend
 
             app.UseCors(MySpecificOrigin);
 
-            //app.UseCors(x => x
-            //    .AllowAnyMethod()
-            //    .AllowAnyHeader()
-            //    .SetIsOriginAllowed(origin => true)
-            //    .AllowCredentials());
-
-
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-
-
-
-
-                //endpoints.MapGet("/echo",
-                //context => context.Response.WriteAsync("echo"))
-                //.RequireCors(MySpecificOrigin);
-
-                //endpoints.MapControllers()
-                //         .RequireCors(MySpecificOrigin);
-
-                //endpoints.MapGet("/echo2",
-                //    context => context.Response.WriteAsync("echo2"));
-
-                //endpoints.MapRazorPages();
             });
+
             seeder.EnsureSeedData();
         }
     }

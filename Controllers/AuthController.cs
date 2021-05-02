@@ -1,17 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 using ticketsystem_backend.Data;
 using ticketsystem_backend.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Cors;
 
 namespace ticketsystem_backend.Controllers
 {
@@ -26,7 +22,8 @@ namespace ticketsystem_backend.Controllers
             _context = context;
         }
 
-        [HttpPost, Route("login")]
+        [Route("login")]
+        [HttpPost]
         public IActionResult Login([FromBody]LoginModel user)
         {
             // check if user exist

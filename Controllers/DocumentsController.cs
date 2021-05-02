@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ticketsystem_backend.Data;
@@ -11,7 +8,7 @@ using ticketsystem_backend.Models;
 
 namespace ticketsystem_backend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/documents")]
     [ApiController]
     public class DocumentsController : ControllerBase
     {
@@ -61,42 +58,11 @@ namespace ticketsystem_backend.Controllers
         /// <returns></returns>
         // GET: api/Documents/GetByModuleId/5
         [HttpGet("GetByModuleId/{id}")]
-        public async Task<ActionResult<IEnumerable<Document>>> GetModuleDocuments(int id)
+        public async Task<ActionResult<IEnumerable<Document>>> GetByModuleId(int id)
         {
             return await _context.Documents.Where(d => d.Module.Id == id)
                 .ToListAsync();
         }
-
-        //// PUT: api/Documents/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutDocument(int id, Document document)
-        //{
-        //    if (id != document.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(document).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!DocumentExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
 
         /// <summary>
         /// Create a new document and returns it
@@ -104,7 +70,6 @@ namespace ticketsystem_backend.Controllers
         /// <param name="documentVM">Document-Model including Name, Link and ModuleId</param>
         /// <returns></returns>
         // POST: api/Documents
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Document>> PostDocument(CreateDocumentVM documentVM)
         {
@@ -126,31 +91,5 @@ namespace ticketsystem_backend.Controllers
             // return new document
             return CreatedAtAction("GetDocument", new { id = document.Id }, document);
         }
-
-        //// DELETE: api/Documents/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteDocument(int id)
-        //{
-        //    var document = await _context.Documents.FindAsync(id);
-        //    if (document == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.Documents.Remove(document);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        /// <summary>
-        /// Returns true if Document exist
-        /// </summary>
-        /// <param name="id">DocumentId</param>
-        /// <returns></returns>
-        //private bool DocumentExists(int id)
-        //{
-        //    return _context.Documents.Any(e => e.Id == id);
-        //}
     }
 }

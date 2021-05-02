@@ -12,7 +12,7 @@ using ticketsystem_backend.Models;
 
 namespace ticketsystem_backend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/tickets")]
     [ApiController]
     [Authorize]
     public class TicketsController : ControllerBase
@@ -45,7 +45,7 @@ namespace ticketsystem_backend.Controllers
         /// <returns></returns>
         // GET: api/Ticktes/GetByModuleId/5
         [HttpGet("GetByModuleId/{id}")]
-        public async Task<ActionResult<IEnumerable<Ticket>>> GetModuleTickets(int id)
+        public async Task<ActionResult<IEnumerable<Ticket>>> GetByModuleId(int id)
         {
             // get all documents that are included in the module
             IEnumerable<Document> documents = _context.Documents.Where(d => d.Module.Id == id);
@@ -55,7 +55,10 @@ namespace ticketsystem_backend.Controllers
                 .ToListAsync();
         }
 
-
+        /// <summary>
+        /// Returns a summary of opened and closed tickets per month
+        /// </summary>
+        /// <returns></returns>
         // GET: api/Ticktes/TicketTimeline
         [HttpGet("TicketTimeline")]
         public async Task<ActionResult<IEnumerable<Timeline>>> GetTicketTimeline()
@@ -81,6 +84,10 @@ namespace ticketsystem_backend.Controllers
             return timelines;
         }
 
+        /// <summary>
+        /// Returns a summary of opened and closed tickets per module
+        /// </summary>
+        /// <returns></returns>
         // GET: api/Ticktes/TicketsPerModule
         [HttpGet("TicketsPerModule")]
         public async Task<ActionResult<IEnumerable<TicketStat>>> GetTicketsPerModule()
@@ -126,10 +133,10 @@ namespace ticketsystem_backend.Controllers
         /// Returns a list of all tickets assigned to the tutor that is logged in
         /// </summary>
         /// <returns></returns>
-        // GET: api/Tickets/TutorTickets
+        // GET: api/Tickets/GetByTutor
         [HttpGet("GetByTutor")]
         [Authorize(Roles = "Tutor")]
-        public async Task<ActionResult<IEnumerable<Ticket>>> GetTutorTickets()
+        public async Task<ActionResult<IEnumerable<Ticket>>> GetByTutor()
         {
             // get registered user
             ClaimsPrincipal loggedUser = HttpContext.User;
@@ -155,9 +162,9 @@ namespace ticketsystem_backend.Controllers
         /// Returns a list of tickets that are created by the registered user
         /// </summary>
         /// <returns></returns>
-        // GET: api/Tickets/UserTickets
+        // GET: api/Tickets/GetByUser
         [HttpGet("GetByUser")]
-        public async Task<ActionResult<IEnumerable<Ticket>>> GetUserTickets()
+        public async Task<ActionResult<IEnumerable<Ticket>>> GetByUser()
         {
             // get registered user
             ClaimsPrincipal loggedUser = HttpContext.User;
@@ -212,45 +219,12 @@ namespace ticketsystem_backend.Controllers
             return ticketVM;
         }
 
-        //// PUT: api/Tickets/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //[Authorize(Roles = "Tutor")]
-        //public async Task<IActionResult> PutTicket(int id, Ticket ticket)
-        //{
-        //    if (id != ticket.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(ticket).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!TicketExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
         /// <summary>
         /// Creates a new ticket
         /// </summary>
         /// <param name="ticketVM">Ticket-Model including Title, Description and DocumentId</param>
         /// <returns></returns>
         // POST: api/Tickets
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Ticket>> PostTicket(CreateTicketVM ticketVM)
         {
@@ -291,7 +265,7 @@ namespace ticketsystem_backend.Controllers
         // GET: api/Tickets/ChangeStatus/5
         [HttpPost("ChangeStatus/{id}")]
         [Authorize(Roles = "Tutor")]
-        public async Task<ActionResult<IEnumerable<Ticket>>> ChangeTicketStatus(int id)
+        public async Task<ActionResult<IEnumerable<Ticket>>> PostChangeStatus(int id)
         {
             // get registered user
             ClaimsPrincipal loggedUser = HttpContext.User;
@@ -320,31 +294,5 @@ namespace ticketsystem_backend.Controllers
 
             return CreatedAtAction("GetTicket", new { id = ticket.Id }, ticket);
         }
-
-        //// DELETE: api/Tickets/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteTicket(int id)
-        //{
-        //    var ticket = await _context.Tickets.FindAsync(id);
-        //    if (ticket == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.Tickets.Remove(ticket);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        /// <summary>
-        /// Returns true if ticket exist
-        /// </summary>
-        /// <param name="id">TicketId</param>
-        /// <returns></returns>
-        //private bool TicketExists(int id)
-        //{
-        //    return _context.Tickets.Any(e => e.Id == id);
-        //}
     }
 }
