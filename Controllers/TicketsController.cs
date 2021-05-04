@@ -190,6 +190,7 @@ namespace ticketsystem_backend.Controllers
             Ticket ticket = await _context.Tickets
                 .Where(t => t.Id == id)
                 .Include(t => t.Document.Module.Responsible)
+                .Include(t => t.CreatedBy)
                 .FirstOrDefaultAsync();
 
             // check if ticket exist

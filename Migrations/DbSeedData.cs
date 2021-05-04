@@ -18,6 +18,32 @@ namespace ticketsystem_backend.Migrations
 
         public void EnsureSeedData()
         {
+            //foreach (var item in _context.Tickets)
+            //{
+            //    _context.Tickets.Remove(item);
+            //}
+            //foreach (var item in _context.Documents)
+            //{
+            //    _context.Documents.Remove(item);
+            //}
+            //foreach (var item in _context.Comments)
+            //{
+            //    _context.Comments.Remove(item);
+            //}
+            //foreach (var item in _context.Modules)
+            //{
+            //    _context.Modules.Remove(item);
+            //}
+            //foreach (var item in _context.Users)
+            //{
+            //    _context.Users.Remove(item);
+            //}
+            //foreach (var item in _context.Roles)
+            //{
+            //    _context.Roles.Remove(item);
+            //}
+            //_context.SaveChanges();
+
             // Ensure database is created
             _context.Database.EnsureCreated();
 
@@ -34,39 +60,46 @@ namespace ticketsystem_backend.Migrations
             {
                 _context.Users.Add(new User()
                 {
-                    UserName = "Alexander.Kathan@iubh-fernstudium.de",
+                    UserName = "alexander.kathan",
                     Password = "sicher",
                     Role = _context.Roles.First(r => r.Name == "Student")
                 });
 
                 _context.Users.Add(new User()
                 {
-                    UserName = "Michael.Ziaja@iubh-fernstudium.de",
+                    UserName = "michael.ziaja",
                     Password = "sicher",
                     Role = _context.Roles.First(r => r.Name == "Student")
                 });
 
                 _context.Users.Add(new User()
                 {
-                    UserName = "Thomas.Hetfeld@iubh-fernstudium.de",
+                    UserName = "thomas.hetfeld",
                     Password = "sicher",
                     Role = _context.Roles.First(r => r.Name == "Student")
                 });
 
                 _context.Users.Add(new User()
                 {
-                    UserName = "Mirja.Sirisko@iubh-fernstudium.de",
+                    UserName = "mirja.sirisko",
                     Password = "sicher",
                     Role = _context.Roles.First(r => r.Name == "Tutor")
                 });
 
                 _context.Users.Add(new User()
                 {
-                    UserName = "Janina.Mantel@iubh-fernstudium.de",
+                    UserName = "janina.mantel",
                     Password = "sicher",
                     Role = _context.Roles.First(r => r.Name == "Tutor")
                 });
-             
+
+                _context.Users.Add(new User()
+                {
+                    UserName = "tobias.brueckmann",
+                    Password = "sicher",
+                    Role = _context.Roles.First(r => r.Name == "Tutor")
+                });
+
                 _context.SaveChanges();
             }
 
@@ -75,32 +108,50 @@ namespace ticketsystem_backend.Migrations
             {
                 _context.Modules.Add(new Module()
                 {
-                    Name = "Jodeln für Anfänger",
-                    Responsible = _context.Users.First(u => u.UserName == "Mirja.Sirisko@iubh-fernstudium.de")
+                    Name = "IMT01 - Mathematik Grundlagen I",
+                    Responsible = _context.Users.First(u => u.UserName == "tobias.brueckmann")
                 });
 
                 _context.Modules.Add(new Module()
                 {
-                    Name = "Diskuswerfen",
-                    Responsible = _context.Users.First(u => u.UserName == "Janina.Mantel@iubh-fernstudium.de")
+                    Name = "BWIR01-01 - Einführung in das wissenschaftliche Arbeiten",
+                    Responsible = _context.Users.First(u => u.UserName == "tobias.brueckmann")
                 });
 
                 _context.Modules.Add(new Module()
                 {
-                    Name = "Karate mit Obst",
-                    Responsible = _context.Users.First(u => u.UserName == "Mirja.Sirisko@iubh-fernstudium.de")
+                    Name = "BBWL01 - Betriebswirtswirtschaftslehre",
+                    Responsible = _context.Users.First(u => u.UserName == "mirja.sirisko")
                 });
 
                 _context.Modules.Add(new Module()
                 {
-                    Name = "Hangover Basics",
-                    Responsible = _context.Users.First(u => u.UserName == "Janina.Mantel@iubh-fernstudium.de")
+                    Name = "BBWL02 - Betriebswirtswirtschaftslehre",
+                    Responsible = _context.Users.First(u => u.UserName == "mirja.sirisko")
                 });
 
                 _context.Modules.Add(new Module()
                 {
-                    Name = "Ernährungswissenschaften",
-                    Responsible = _context.Users.First(u => u.UserName == "Mirja.Sirisko@iubh-fernstudium.de")
+                    Name = "IGIS01 - Grundlagen der industriellen Softwaretechnik",
+                    Responsible = _context.Users.First(u => u.UserName == "mirja.sirisko")
+                });
+
+                _context.Modules.Add(new Module()
+                {
+                    Name = "BCTR01-01 - Computer Training",
+                    Responsible = _context.Users.First(u => u.UserName == "janina.mantel")
+                });
+
+                _context.Modules.Add(new Module()
+                {
+                    Name = "IOBP01 - Objektorientierte Programmierung",
+                    Responsible = _context.Users.First(u => u.UserName == "janina.mantel")
+                });
+
+                _context.Modules.Add(new Module()
+                {
+                    Name = "IOBP02 - Objektorientierte Programmierung",
+                    Responsible = _context.Users.First(u => u.UserName == "janina.mantel")
                 });
 
                 _context.SaveChanges();
@@ -111,102 +162,283 @@ namespace ticketsystem_backend.Migrations
             {
                 _context.Documents.Add(new Document()
                 {
-                    Name = "Mahlen nach Zahlen 1",
-                    Link = "http://www.mahlennachzahlen.de",
-                    Module = _context.Modules.First(m => m.Name == "Jodeln für Anfänger")
+                    Name = "Skript",
+                    Link = "http://www.hetfeld.name/material/skript-imt01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IMT01 - Mathematik Grundlagen I")
                 });
 
                 _context.Documents.Add(new Document()
                 {
-                    Name = "Mahlen nach Zahlen 2",
-                    Link = "http://www.mahlennachzahlen.de",
-                    Module = _context.Modules.First(m => m.Name == "Diskuswerfen")
+                    Name = "Präsentationen",
+                    Link = "http://www.hetfeld.name/material/skript-imt01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IMT01 - Mathematik Grundlagen I")
                 });
 
                 _context.Documents.Add(new Document()
                 {
-                    Name = "Mahlen nach Zahlen 3",
-                    Link = "http://www.mahlennachzahlen.de",
-                    Module = _context.Modules.First(m => m.Name == "Karate mit Obst")
+                    Name = "Vodcasts",
+                    Link = "http://www.hetfeld.name/material/skript-imt01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IMT01 - Mathematik Grundlagen I")
                 });
 
                 _context.Documents.Add(new Document()
                 {
-                    Name = "Mahlen nach Zahlen 4",
-                    Link = "http://www.mahlennachzahlen.de",
-                    Module = _context.Modules.First(m => m.Name == "Hangover Basics")
+                    Name = "Podcasts",
+                    Link = "http://www.hetfeld.name/material/skript-imt01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IMT01 - Mathematik Grundlagen I")
                 });
 
                 _context.Documents.Add(new Document()
                 {
-                    Name = "Mahlen nach Zahlen 5",
-                    Link = "http://www.mahlennachzahlen.de",
-                    Module = _context.Modules.First(m => m.Name == "Ernährungswissenschaften")
+                    Name = "Repetitorium",
+                    Link = "http://www.hetfeld.name/material/skript-imt01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IMT01 - Mathematik Grundlagen I")
                 });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Aufgezeichnete Tutorien",
+                    Link = "http://www.hetfeld.name/material/skript-imt01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IMT01 - Mathematik Grundlagen I")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Skript",
+                    Link = "http://www.hetfeld.name/material/skript-bwir01-01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "BWIR01-01 - Einführung in das wissenschaftliche Arbeiten")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Präsentationen",
+                    Link = "http://www.hetfeld.name/material/skript-bwir01-01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "BWIR01-01 - Einführung in das wissenschaftliche Arbeiten")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Vodcasts",
+                    Link = "http://www.hetfeld.name/material/skript-bwir01-01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "BWIR01-01 - Einführung in das wissenschaftliche Arbeiten")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Podcasts",
+                    Link = "http://www.hetfeld.name/material/skript-bwir01-01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "BWIR01-01 - Einführung in das wissenschaftliche Arbeiten")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Workbookaufgaben",
+                    Link = "http://www.hetfeld.name/material/skript-bwir01-01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "BWIR01-01 - Einführung in das wissenschaftliche Arbeiten")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Skript",
+                    Link = "http://www.hetfeld.name/material/skript-bbwl01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "BBWL01 - Betriebswirtswirtschaftslehre")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Präsentationen",
+                    Link = "http://www.hetfeld.name/material/skript-bbwl01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "BBWL01 - Betriebswirtswirtschaftslehre")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Vodcasts",
+                    Link = "http://www.hetfeld.name/material/skript-bbwl01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "BBWL01 - Betriebswirtswirtschaftslehre")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Podcasts",
+                    Link = "http://www.hetfeld.name/material/skript-bbwl01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "BBWL01 - Betriebswirtswirtschaftslehre")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Folien zu Videolektionen",
+                    Link = "http://www.hetfeld.name/material/skript-bbwl01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "BBWL01 - Betriebswirtswirtschaftslehre")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Skript",
+                    Link = "http://www.hetfeld.name/material/skript-bbwl02.pdf",
+                    Module = _context.Modules.First(m => m.Name == "BBWL02 - Betriebswirtswirtschaftslehre")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Präsentationen",
+                    Link = "http://www.hetfeld.name/material/skript-bbwl02.pdf",
+                    Module = _context.Modules.First(m => m.Name == "BBWL02 - Betriebswirtswirtschaftslehre")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Vodcasts",
+                    Link = "http://www.hetfeld.name/material/skript-bbwl02.pdf",
+                    Module = _context.Modules.First(m => m.Name == "BBWL02 - Betriebswirtswirtschaftslehre")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Podcasts",
+                    Link = "http://www.hetfeld.name/material/skript-bbwl02.pdf",
+                    Module = _context.Modules.First(m => m.Name == "BBWL02 - Betriebswirtswirtschaftslehre")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Folien zu Videolektionen",
+                    Link = "http://www.hetfeld.name/material/skript-bbwl02.pdf",
+                    Module = _context.Modules.First(m => m.Name == "BBWL02 - Betriebswirtswirtschaftslehre")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Skript",
+                    Link = "http://www.hetfeld.name/material/skript-igis01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IGIS01 - Grundlagen der industriellen Softwaretechnik")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Präsentationen",
+                    Link = "http://www.hetfeld.name/material/skript-igis01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IGIS01 - Grundlagen der industriellen Softwaretechnik")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Vodcasts",
+                    Link = "http://www.hetfeld.name/material/skript-igis01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IGIS01 - Grundlagen der industriellen Softwaretechnik")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Podcasts",
+                    Link = "http://www.hetfeld.name/material/skript-igis01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IGIS01 - Grundlagen der industriellen Softwaretechnik")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Aufgabenblätter",
+                    Link = "http://www.hetfeld.name/material/skript-igis01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IGIS01 - Grundlagen der industriellen Softwaretechnik")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Aufgezeichnete Tutorien",
+                    Link = "http://www.hetfeld.name/material/skript-igis01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IGIS01 - Grundlagen der industriellen Softwaretechnik")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Videos",
+                    Link = "http://www.hetfeld.name/material/skript-iobp01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "BCTR01-01 - Computer Training")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Skript",
+                    Link = "http://www.hetfeld.name/material/skript-iobp01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IOBP01 - Objektorientierte Programmierung")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Präsentationen",
+                    Link = "http://www.hetfeld.name/material/skript-iobp01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IOBP01 - Objektorientierte Programmierung")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Vodcasts",
+                    Link = "http://www.hetfeld.name/material/skript-iobp01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IOBP01 - Objektorientierte Programmierung")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Podcasts",
+                    Link = "http://www.hetfeld.name/material/skript-iobp01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IOBP01 - Objektorientierte Programmierung")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Aufgezeichnete Tutorien",
+                    Link = "http://www.hetfeld.name/material/skript-iobp01.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IOBP01 - Objektorientierte Programmierung")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Skript",
+                    Link = "http://www.hetfeld.name/material/skript-iobp02.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IOBP02 - Objektorientierte Programmierung")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Präsentationen",
+                    Link = "http://www.hetfeld.name/material/skript-iobp02.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IOBP02 - Objektorientierte Programmierung")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Vodcasts",
+                    Link = "http://www.hetfeld.name/material/skript-iobp02.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IOBP02 - Objektorientierte Programmierung")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Podcasts",
+                    Link = "http://www.hetfeld.name/material/skript-iobp02.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IOBP02 - Objektorientierte Programmierung")
+                });
+
+                _context.Documents.Add(new Document()
+                {
+                    Name = "Aufgezeichnete Tutorien",
+                    Link = "http://www.hetfeld.name/material/skript-iobp02.pdf",
+                    Module = _context.Modules.First(m => m.Name == "IOBP02 - Objektorientierte Programmierung")
+                });
+
                 _context.SaveChanges();
-
             }
 
             // Seed tickets if no ticket exist
             if (!_context.Tickets.Any())
             {
-                _context.Tickets.Add(new Ticket()
-                {
-                    Title = "Inhalt total unverständlich",
-                    Description = "Bitte Abschnitt 3.2 neu formulieren",
-                    CreatedBy = _context.Users.First(u => u.UserName == "Mirja.Sirisko@iubh-fernstudium.de"),
-                    CreatedDate = DateTime.Now,
-                    TicketClosed = true,
-                    Document = _context.Documents.First(d => d.Name == "Mahlen nach Zahlen 4"),
-                    LastChangedBy = _context.Users.First(u => u.UserName == "Janina.Mantel@iubh-fernstudium.de"),
-                    LastChangedDate = DateTime.Now
-                });
-
-                _context.Tickets.Add(new Ticket()
-                {
-                    Title = "Inhalt unverständlich",
-                    Description = "Bitte Abschnitt 3.2 neu formulieren",
-                    CreatedBy = _context.Users.First(u => u.UserName == "Alexander.Kathan@iubh-fernstudium.de"),
-                    CreatedDate = DateTime.Now,
-                    TicketClosed = true,
-                    Document = _context.Documents.First(d => d.Name == "Mahlen nach Zahlen 3")
-                });
-
-                _context.Tickets.Add(new Ticket()
-                {
-                    Title = "Inhalt unverständlich",
-                    Description = "Bitte Abschnitt 3.2 neu formulieren",
-                    CreatedBy = _context.Users.First(u => u.UserName == "Janina.Mantel@iubh-fernstudium.de"),
-                    CreatedDate = DateTime.Now,
-                    TicketClosed = false,
-                    Document = _context.Documents.First(d => d.Name == "Mahlen nach Zahlen 2")
-                });
-
-                _context.Tickets.Add(new Ticket()
-                {
-                    Title = "Inhalt unverständlich",
-                    Description = "Bitte Abschnitt 3.2 neu formulieren",
-                    CreatedBy = _context.Users.First(u => u.UserName == "Michael.Ziaja@iubh-fernstudium.de"),
-                    CreatedDate = DateTime.Now,
-                    TicketClosed = false,
-                    Document = _context.Documents.First(d => d.Name == "Mahlen nach Zahlen 1")
-                });
-
-                _context.SaveChanges();
+ 
             }
 
             // Seed comments if no comment exist
             if (!_context.Comments.Any())
             {
-                _context.Comments.Add(new Comment()
-                {
-                    CreatedBy = _context.Users.First(u => u.UserName == "Michael.Ziaja@iubh-fernstudium.de"),
-                    CreatedDate = DateTime.Now,
-                    Text = "Lern doch einfach lesen, oder zieh Dir ne Brille an!",
-                    Ticket = _context.Tickets.First(t => t.Title == "Inhalt total unverständlich")
-                });
 
-                _context.SaveChanges();
             }
         }
     }

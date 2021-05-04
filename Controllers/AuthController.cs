@@ -44,10 +44,12 @@ namespace ticketsystem_backend.Controllers
                 var secretKey = new SymmetricSecurityKey(Base64UrlEncoder.DecodeBytes("MBcCT4UEs67vh3shK683Lxhn33t2LTtH"));
                 var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
+                User fullUser = _context.Users.Where(u => u.UserName == user.UserName).FirstOrDefault();
+
                 // add userName and userRole to claim
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Name, fullUser.UserName),
                     new Claim(ClaimTypes.Role, GetUserRole(user.UserName).Name)
                 };
 
