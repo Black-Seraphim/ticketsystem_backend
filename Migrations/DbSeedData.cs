@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using ticketsystem_backend.Data;
 using ticketsystem_backend.Models;
 
@@ -16,34 +13,12 @@ namespace ticketsystem_backend.Migrations
             _context = context;
         }
 
+        /// <summary>
+        /// Makes sure, that the database with each table and all relations is created.
+        /// Also checks each table for existing data. If there are no data inside of the table, it will be filled with sample data for testing
+        /// </summary>
         public void EnsureSeedData()
         {
-            //foreach (var item in _context.Tickets)
-            //{
-            //    _context.Tickets.Remove(item);
-            //}
-            //foreach (var item in _context.Documents)
-            //{
-            //    _context.Documents.Remove(item);
-            //}
-            //foreach (var item in _context.Comments)
-            //{
-            //    _context.Comments.Remove(item);
-            //}
-            //foreach (var item in _context.Modules)
-            //{
-            //    _context.Modules.Remove(item);
-            //}
-            //foreach (var item in _context.Users)
-            //{
-            //    _context.Users.Remove(item);
-            //}
-            //foreach (var item in _context.Roles)
-            //{
-            //    _context.Roles.Remove(item);
-            //}
-            //_context.SaveChanges();
-
             // Ensure database is created
             _context.Database.EnsureCreated();
 
@@ -432,13 +407,13 @@ namespace ticketsystem_backend.Migrations
             // Seed tickets if no ticket exist
             if (!_context.Tickets.Any())
             {
- 
+                // sample tickets will be created on live system
             }
 
             // Seed comments if no comment exist
             if (!_context.Comments.Any())
             {
-
+                // sample comments will be created on live system
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ticketsystem_backend.Data;
@@ -8,8 +9,12 @@ using ticketsystem_backend.Models;
 
 namespace ticketsystem_backend.Controllers
 {
+    /// <summary>
+    /// DocumentsController provides all actions acording to documents
+    /// </summary>
     [Route("api/documents")]
     [ApiController]
+    [Authorize]
     public class DocumentsController : ControllerBase
     {
         private readonly TicketSystemDbContext _context;

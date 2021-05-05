@@ -1,6 +1,16 @@
 # ticketsystem_backend
 ## Description
-Web-API build for IUBH Ticket System
+Web-API build for IUBH Ticket System Prototype
+
+For testing of this prototype ther're some users predefined:
+tobias.brueckmann (Role: Tutor)
+mirja.sirisko (Role: Tutor)
+janina.mantel (Role: Tutor)
+alexander.kathan (Role: Student)
+michael.ziaja (Role: Student)
+thomas.hetfeld (Role: Student)
+
+Password for all users: 'sicher'
 
 ## Database
 ![Database Schema](./Schema/TicketSystemDb.png "Database Schema")

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ticketsystem_backend.Models
 {
+    // ticket model for ticket database
     public class Ticket
     {
         public int Id { get; set; }
@@ -18,7 +17,7 @@ namespace ticketsystem_backend.Models
         public DateTime LastChangedDate { get; set; }
     }
 
-    // Ticket-Model for API, that includes a list of comments
+    // Ticket-Model for API, that includes a list of according comments
     public class TicketVM
     {
         public int Id { get; set; }

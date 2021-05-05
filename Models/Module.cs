@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ticketsystem_backend.Models
+﻿namespace ticketsystem_backend.Models
 {
+    // module model for module table
     public class Module
     {
         public int Id { get; set; }

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ticketsystem_backend.Data;
@@ -11,8 +9,12 @@ using ticketsystem_backend.Models;
 
 namespace ticketsystem_backend.Controllers
 {
+    /// <summary>
+    /// ModulesController provides all actions acording to modules
+    /// </summary>
     [Route("api/modules")]
     [ApiController]
+    [Authorize]
     public class ModulesController : ControllerBase
     {
         private readonly TicketSystemDbContext _context;

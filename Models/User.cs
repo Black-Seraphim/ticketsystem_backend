@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ticketsystem_backend.Models
+﻿namespace ticketsystem_backend.Models
 {
+    // user model for user table
     public class User
     {
         public int Id { get; set; }

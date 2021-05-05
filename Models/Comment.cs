@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ticketsystem_backend.Models
 {
+    // Database model for comment table
     public class Comment
     {
         public int Id { get; set; }

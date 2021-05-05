@@ -12,13 +12,16 @@ using ticketsystem_backend.Models;
 
 namespace ticketsystem_backend.Controllers
 {
+    /// <summary>
+    /// CommentsController provides all actions acording to comments
+    /// </summary>
     [Route("api/comments")]
     [ApiController]
     [Authorize]
     public class CommentsController : ControllerBase
     {
         private readonly TicketSystemDbContext _context;
-
+        private readonly int serverTimeShift = 2;
         public CommentsController(TicketSystemDbContext context)
         {
             _context = context;
@@ -103,7 +106,7 @@ namespace ticketsystem_backend.Controllers
             Comment comment = new()
             {
                 CreatedBy = user,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.Now.AddHours(serverTimeShift),
                 Text = commentVM.Text,
                 Ticket = ticket
             };

@@ -1,23 +1,13 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ticketsystem_backend.Data;
 using ticketsystem_backend.Migrations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.AspNetCore.Http;
 
 namespace ticketsystem_backend
 {
@@ -37,10 +27,12 @@ namespace ticketsystem_backend
         {
             services.AddControllers();
 
+            // add cors to service and configure it
             services.AddCors(options =>
             {
                 options.AddPolicy(name: MySpecificOrigin, builder =>
                 {
+                    // no restrictions due to prototype use
                     builder
                         .AllowAnyOrigin()
                         .AllowAnyHeader()
@@ -48,15 +40,12 @@ namespace ticketsystem_backend
                 });
             });
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ticketsystem_backend", Version = "v1" });
-            });
-
+            // add database context to service
             services.AddDbContext<TicketSystemDbContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("TicketContext")));
             services.AddTransient<DbSeedData>();
 
+            // add authentication to service using JwtBearer
             services.AddAuthentication(opt =>
             {
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -64,6 +53,7 @@ namespace ticketsystem_backend
             })
             .AddJwtBearer(options =>
             {
+                // configure JwtBearer
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -83,16 +73,17 @@ namespace ticketsystem_backend
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ticketsystem_backend v1"));
             }
 
+            // use https connection
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
+            // use cors that is configured in ConfigureServices
             app.UseCors(MySpecificOrigin);
 
+            // use authentication that is configured in ConfigureServices
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -101,6 +92,7 @@ namespace ticketsystem_backend
                 endpoints.MapControllers();
             });
 
+            // seed data for development use
             seeder.EnsureSeedData();
         }
     }

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ticketsystem_backend.Models
+﻿namespace ticketsystem_backend.Models
 {
+    // timeline model for API to create statistics view
     public class Timeline
     {
         public string Month { get; set; }
@@ -12,6 +8,7 @@ namespace ticketsystem_backend.Models
         public int ClosedTickets { get; set; }
     }
 
+    // ticketstat model for API to create statistics view
     public class TicketStat
     {
         public string ModulName { get; set; }

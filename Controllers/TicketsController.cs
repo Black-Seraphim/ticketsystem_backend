@@ -12,12 +12,16 @@ using ticketsystem_backend.Models;
 
 namespace ticketsystem_backend.Controllers
 {
+    /// <summary>
+    /// TicketsController provides all actions acording to tickets
+    /// </summary>
     [Route("api/tickets")]
     [ApiController]
     [Authorize]
     public class TicketsController : ControllerBase
     {
         private readonly TicketSystemDbContext _context;
+        private readonly int serverTimeShift = 2;
 
         public TicketsController(TicketSystemDbContext context)
         {
@@ -64,11 +68,11 @@ namespace ticketsystem_backend.Controllers
         public async Task<ActionResult<IEnumerable<Timeline>>> GetTicketTimeline()
         {
             IEnumerable<Ticket> tickets = await _context.Tickets.ToListAsync();
-            List<Timeline> timelines = new List<Timeline>();
+            List<Timeline> timelines = new();
 
             for (int i = 1; i < 13; i++)
             {
-                DateTime date = new DateTime(1900, i, 1);
+                DateTime date = new(1900, i, 1);
                 int openedTickets = tickets.Where(t => t.CreatedDate.Month == i).Count();
                 int closedTickets = tickets.Where(t => t.LastChangedDate.Month == i && t.TicketClosed == true).Count();
 
@@ -95,7 +99,7 @@ namespace ticketsystem_backend.Controllers
             IEnumerable<Module> modules = await _context.Modules.ToListAsync();
             IEnumerable<Ticket> tickets = await _context.Tickets.ToListAsync();
             IEnumerable<Document> documents = await _context.Documents.ToListAsync();
-            List<TicketStat> ticketStats = new List<TicketStat>();
+            List<TicketStat> ticketStats = new();
 
             foreach (Module module in modules)
             {
@@ -241,11 +245,11 @@ namespace ticketsystem_backend.Controllers
             Ticket ticket = new()
             {
                 CreatedBy = user,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.Now.AddHours(serverTimeShift),
                 Description = ticketVM.Description,
                 Document = document,
                 LastChangedBy = user,
-                LastChangedDate = DateTime.Now,
+                LastChangedDate = DateTime.Now.AddHours(serverTimeShift),
                 TicketClosed = false,
                 Title = ticketVM.Title
             };
@@ -287,7 +291,7 @@ namespace ticketsystem_backend.Controllers
 
             // change LastChangedBy and LastChangedDate
             ticket.LastChangedBy = user;
-            ticket.LastChangedDate = DateTime.Now;
+            ticket.LastChangedDate = DateTime.Now.AddHours(serverTimeShift);
 
             // update database
             _context.Tickets.Update(ticket);

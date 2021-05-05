@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ticketsystem_backend.Models;
 
 namespace ticketsystem_backend.Data
 {
+    /// <summary>
+    /// Database context, that is based on the database models
+    /// </summary>
     public class TicketSystemDbContext : DbContext
     {
         public TicketSystemDbContext (DbContextOptions<TicketSystemDbContext> options)

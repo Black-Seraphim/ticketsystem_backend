@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -7,10 +8,12 @@ using System.Linq;
 using System.Security.Claims;
 using ticketsystem_backend.Data;
 using ticketsystem_backend.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace ticketsystem_backend.Controllers
 {
+    /// <summary>
+    /// AuthController provide actions for login procedure.
+    /// </summary>
     [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
@@ -22,6 +25,12 @@ namespace ticketsystem_backend.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Login-Action that sends a token if the send user credentials are valid.
+        /// The Token is needed for each other API-Controller, that needs authorization
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [Route("login")]
         [HttpPost]
         public IActionResult Login([FromBody]LoginModel user)
@@ -41,45 +50,42 @@ namespace ticketsystem_backend.Controllers
             // create and send token if user is valid
             if (UserValidate(user.UserName, user.Password))
             {
-                var secretKey = new SymmetricSecurityKey(Base64UrlEncoder.DecodeBytes("MBcCT4UEs67vh3shK683Lxhn33t2LTtH"));
-                var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+                SymmetricSecurityKey secretKey = new(Base64UrlEncoder.DecodeBytes("MBcCT4UEs67vh3shK683Lxhn33t2LTtH"));
+                SigningCredentials signingCredentials = new(secretKey, SecurityAlgorithms.HmacSha256);
 
-                User fullUser = _context.Users.Where(u => u.UserName == user.UserName).FirstOrDefault();
+                // get original user data out of the database
+                User fullUser = _context.Users
+                    .Where(u => u.UserName == user.UserName)
+                    .Include(u => u.Role)
+                    .FirstOrDefault();
+                Role role = _context.Roles
+                    .Where(r => r == fullUser.Role)
+                    .FirstOrDefault();
 
                 // add userName and userRole to claim
-                var claims = new List<Claim>
+                List<Claim> claims = new()
                 {
                     new Claim(ClaimTypes.Name, fullUser.UserName),
-                    new Claim(ClaimTypes.Role, GetUserRole(user.UserName).Name)
+                    new Claim(ClaimTypes.Role, role.Name)
                 };
 
-                var tokenOptions = new JwtSecurityToken(
+                // create token
+                JwtSecurityToken tokenOptions = new(
                     //issuer: "https://epic-northcutt-0cee3d.netlify.app",
                     issuer: "*",
                     audience: "*",
                     //audience: "https://epic-northcutt-0cee3d.netlify.app",
                     claims: claims,
-                    expires: DateTime.Now.AddMinutes(61), // increased from 60 to 61 according to michaels request ;-)
+                    expires: DateTime.Now.AddMinutes(60),
                     signingCredentials: signingCredentials                    
                     );
 
-                var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+                string tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
                 return Ok(new { Token = tokenString });
             }
 
+            // return unauthorized if user could not be validated
             return Unauthorized();
-        }
-
-        /// <summary>
-        /// Returns the userRole for send userName
-        /// </summary>
-        /// <param name="userName">Username as Email</param>
-        /// <returns></returns>
-        private Role GetUserRole(string userName)
-        {
-            User user = _context.Users.Include(u => u.Role).Where(u => u.UserName == userName).FirstOrDefault();
-            Role role = _context.Roles.Where(r => r == user.Role).FirstOrDefault();
-            return role;
         }
 
         /// <summary>
