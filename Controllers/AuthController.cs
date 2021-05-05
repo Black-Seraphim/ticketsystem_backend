@@ -71,10 +71,8 @@ namespace ticketsystem_backend.Controllers
 
                 // create token
                 JwtSecurityToken tokenOptions = new(
-                    //issuer: "https://epic-northcutt-0cee3d.netlify.app",
                     issuer: "*",
                     audience: "*",
-                    //audience: "https://epic-northcutt-0cee3d.netlify.app",
                     claims: claims,
                     expires: DateTime.Now.AddMinutes(60),
                     signingCredentials: signingCredentials                    
