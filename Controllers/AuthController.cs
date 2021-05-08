@@ -74,7 +74,7 @@ namespace ticketsystem_backend.Controllers
                     issuer: "*",
                     audience: "*",
                     claims: claims,
-                    expires: DateTime.Now.AddMinutes(60),
+                    expires: DateTime.Now.AddHours(12),
                     signingCredentials: signingCredentials                    
                     );
 
@@ -94,8 +94,10 @@ namespace ticketsystem_backend.Controllers
         /// <returns></returns>
         private bool UserValidate(string userName, string password)
         {
-            User user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
-
+            User user = _context.Users
+                .Where(u => u.UserName == userName)
+                .FirstOrDefault();
+            
             if (user == null)
             {
                 return false;

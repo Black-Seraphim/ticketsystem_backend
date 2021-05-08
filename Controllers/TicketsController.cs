@@ -38,7 +38,7 @@ namespace ticketsystem_backend.Controllers
         {
             return await _context.Tickets
                 .Include(t => t.CreatedBy)
-                .Include(t => t.Document.Module)
+                .Include(t => t.Document.Module.Responsible)
                 .ToListAsync();
         }
 
@@ -108,8 +108,8 @@ namespace ticketsystem_backend.Controllers
                 TicketStat ticketStat = new()
                 {
                     ModulName = module.Name,
-                    OpenTickets = moduleTickes.Where(t => t.TicketClosed == true).Count(),
-                    ClosedTickets = moduleTickes.Where(t => t.TicketClosed == false).Count()
+                    OpenTickets = moduleTickes.Where(t => t.TicketClosed == false).Count(),
+                    ClosedTickets = moduleTickes.Where(t => t.TicketClosed == true).Count()
                 };
                 ticketStats.Add(ticketStat);
             }
