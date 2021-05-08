@@ -2,6 +2,12 @@
 ## Description
 Web-API build for IUBH Ticket System Prototype
 
+For installation you need an SQL-Database and an ASP.NET Core Webserver.
+SQL-Database-Informations has to be set in the Visual Studio-Deploy-Settings.
+
+For local testing it will create an TicketSystemDB.mdb LocalDB-Database automatically on startup of the API.
+
+## Testing Information
 For testing of this prototype ther're some users predefined:  
 tobias.brueckmann (Role: Tutor)  
 mirja.sirisko (Role: Tutor)  
